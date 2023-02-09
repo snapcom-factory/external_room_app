@@ -1,0 +1,14 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<h2>{{title}}</h2>
+
+<div class="flex-container">
+  <div class="form_div">
+    <form class="form" method="POST" action="">
+      {% csrf_token %} {{form.as_p}}
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

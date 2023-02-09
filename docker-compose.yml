@@ -1,0 +1,21 @@
+version: "3.5"
+
+services:
+  db_obtp_plugin:
+    image: postgres:13.2
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_PORT}:5432
+
+  external_rooms_app:
+    image: obtp-image:1.0
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    stdin_open: true
+    depends_on:
+      - db_obtp_plugin
+
+    

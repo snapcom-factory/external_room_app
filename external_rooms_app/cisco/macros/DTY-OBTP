@@ -1,0 +1,62 @@
+import xapi from 'xapi';
+
+// Main function to make it async
+async function main() {
+  // Allow server hostname
+  const http_list = await xapi.Command.HttpClient.Allow.Hostname.List();
+  let found = false;
+  for (let i = 0; i < http_list.HostName.length; ++i) {
+    if (http_list.HostName[i].Expression === 'OBTP_IP') {
+      found = true;
+      break;
+    }
+  }
+  if (!found) {
+    await xapi.Command.HttpClient.Allow.Hostname.Add({
+      Expression: 'OBTP_IP'
+    });
+  }
+
+  // Send serial number
+  const serial_number = await xapi.Status.SystemUnit.Hardware.Module.SerialNumber.get();
+  await xapi.Command.HttpClient.Post({
+    Header: ['Content-Type: application/json'],
+    Url: 'http://OBTP_IP:8000/api/serial-number/',
+    body: '{"sn":"' + serial_number + '", "type":"cisco"}'
+  }).catch((error) => {});
+
+  // Get meetings every minute
+  async function get_meetings() {
+    const magnify_meetings = await xapi.Command.HttpClient.Get({Url: 'http://OBTP_IP:8000/api/get-meetings/'});
+    const meetings = JSON.parse(magnify_meetings.Body).results;
+
+    const bookings = [];
+    for (let i = 0; i < meetings.length; ++i) {
+      // Magnify : start + end | Cisco : start + duration --> compute duration in milliseconds
+      const delta = new Date(meetings[i].end) - new Date(meetings[i].start);
+
+      bookings.push({
+        'Id': '' + i,
+        'Title': meetings[i].name,
+        'Number': meetings[i].jitsi.meeting + '@webconf.snapcom.fr',
+        'Protocol': 'SIP',
+        'Organizer': {'Name': 'DTY'},
+        // Cast duration to minutes
+        'Time': {'StartTime': meetings[i].start, 'Duration': (delta / 1000 / 60)}
+      });
+    }
+
+    if (meetings.length > 0) {
+      const request = {'Bookings': bookings};
+      await xapi.Command.Bookings.Put(JSON.stringify(request));
+    } else {
+      await xapi.Command.Bookings.Clear();
+    }
+  }
+  get_meetings();
+  // Execute code every time interval, set in milliseconds
+  setInterval(get_meetings, 60 * 1000);
+}
+
+main();
+

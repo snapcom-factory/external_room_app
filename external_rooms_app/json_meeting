@@ -1,0 +1,66 @@
+{
+    'count': 1, 
+    'next': None, 
+    'previous': None, 
+    'results': [
+        {
+            'id': '7b777542-da12-4ff7-9d0d-d93cf992a494',
+            'frequency': 1,
+            'is_public': True,
+            'monthly_type': 'date_day',
+            'name': 'quentine_va_a_la_cantine',
+            'nb_occurrences': 1,
+            'owner': '8e5d3e08-5d68-4bbc-8f9f-566f67c59e30',
+            'recurrence': None,
+            'room': None,
+            'start': '2023-01-23T12:07:39.525736Z',
+            'end': '2023-01-23T13:07:39.525736Z',
+            'recurring_until': '2023-01-23T12:07:39.525736Z',
+            'timezone': 'UTC',
+            'weekdays': '0',
+            'guests':
+                [
+                    {
+                        'id': '27720714-5a35-4a63-b526-cdc878e93414',
+                        'user':
+                            {
+                                'id': '9c8dbe02-7d7b-4728-9b3c-4f04ab18dc26',
+                                'language': 'en',
+                                'name': 'hello3 cisco',
+                                'timezone': 'UTC',
+                                'username': 'cisco-hello3'
+                            }, 
+                        'group': None,
+                        'meeting': '7b777542-da12-4ff7-9d0d-d93cf992a494'
+                    }, 
+                    {
+                        'id': '0b2dc369-2dcc-482f-8f9e-e2012abbb576',
+                        'user':
+                            {
+                                'id': 'd07ad035-99ab-4734-956a-fd7971ed3374',
+                                'language': 'en',
+                                'name': 'hello2 cisco',
+                                'timezone': 'UTC',
+                                'username': 'cisco-hello2'
+                            }, 
+                        'group': None,
+                        'meeting': '7b777542-da12-4ff7-9d0d-d93cf992a494'
+                    }
+                ],
+            'jitsi':
+                {
+                    'meeting': '7b777542-da12-4ff7-9d0d-d93cf992a494',
+                    'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzQ0NzIyOTksImlhdCI6MTY3NDQ3MTk5OSwibW9kZXJhdG9yIjp0cnVlLCJhdWQiOiJqaXRzaSIsImlzcyI6ImFwcF9pZCIsInN1YiI6Im1lZXQuaml0c2kiLCJyb29tIjoiN2I3Nzc1NDItZGExMi00ZmY3LTlkMGQtZDkzY2Y5OTJhNDk0IiwiY29udGV4dCI6eyJ1c2VyIjp7ImF2YXRhciI6Imh0dHBzOi8vcm9uYWxkbW90dHJhbS5jby5uei93cC1jb250ZW50L3VwbG9hZHMvMjAxOS8wMS9kZWZhdWx0LXVzZXItaWNvbi04LmpwZyIsIm5hbWUiOiJjaXNjby1oZWxsbzEiLCJlbWFpbCI6ImNpc2NvLWhlbGxvMUBnbWFpbC5jb20ifX19.6vQkjtArvAcoAdbgs3iUKEQtyDMZorNVKVGnASmiDnw'
+                },
+            'occurrences': 
+                {
+                    'from': '2023-01-23T12:06:39.665966Z',
+                    'to': '2024-01-23T12:06:39.665966Z',
+                    'dates': 
+                        [
+                            '2023-01-23T12:07:39.525736Z'
+                        ]
+                }
+        }
+    ]
+}

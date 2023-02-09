@@ -1,0 +1,80 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<div class="room-div">
+
+  <div class="room-spec-div">
+    <div class="flex-container">
+      <div class="all-infos-room">
+        <h2 class="subtitle">{{room.name}}</h2>
+        <div class="characteristics">
+          <h4 class="bloc-title">Caratéristiques de la salle</h4>
+          <ul id="room-characteristics">
+            <li>Bâtiment : {{room.building_id.name}}</li>
+            <li>Étage : {{room.floor}}</li>
+            <li>Numéro de salle : {{room.number}}</li>
+            <li>Capacité : {{room.capacity}} personne(s)</li>
+            <li>
+              Équipée de fenêtre : 
+              {% if room.has_windows %} OUI 
+              {% else %} NON 
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+        <div class="characteristics">
+          <h4 class="bloc-title">Caratéristiques du bâtiment</h4>
+          <ul>
+            <li>Nom : {{room.building_id.name}}</li>
+            <li>Adresse : {{room.building_id.address}}</li>
+            <li>Ville : {{room.building_id.city}}</li>
+            <li>Code Postal : {{room.building_id.postal_code}}</li>
+            <li>Pays : {{room.building_id.country}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <button class="delete-button" id="delete-room" value="{{room.id}}">
+        Supprimer la salle
+      </button>
+      {% if not room.is_init %}
+        <button class="init-room-button" id="init-room" value="{{room.id}}">
+          Initialiser la salle
+        </button>
+      {% endif %}
+    </div>
+  </div>
+
+
+  {% if room.is_init %}
+  <div class="next-meetings">
+    {% for meet in next_meetings %}
+    <div class="meeting">
+      <div class="test-div">
+        <h4 class="meeting-title">{{meet.name}}</h4>
+        <ul class="meeting-characteristics">
+          <li>Début : {{meet.start}}</li>
+          <li>Fin : {{meet.end}}</li>
+          <li>Invités : 
+            <ul>
+              {% for user in meet.guest_infos %}
+                <li>{{user.name}}</li>
+              {% endfor %}
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="flex-container">
+    <div class="not-init-msg"> La salle n'est pas initialisée </div>
+  </div>
+  {% endif %}
+</div>
+
+<script src="{% static 'script_room.js' %}"></script>
+
+{% endblock content %}
