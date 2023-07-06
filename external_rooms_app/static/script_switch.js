@@ -1,5 +1,5 @@
 const switchModeButton = document.getElementsByClassName("switch-mode")[0];
-const logoutButton = document.getElementsByClassName("logout-button")[0];
+const logoutButton = document.getElementsByClassName("logout-btn")[0];
 
 switchModeButton.addEventListener("click", switchMode);
 logoutButton.addEventListener("click", logoutUser);
@@ -15,17 +15,17 @@ if (window.localStorage.getItem("mode") === null) {
 function switchMode() {
     let newMode = (window.localStorage.getItem('mode') === "pull") ? "push" : "pull";
     fetch(`/api/switch-mode/${newMode}`) //, {method:'POST'})
-    .then( (response) => {
-        if (response.status === 200) {
-            window.localStorage.setItem("mode", newMode);
-            switchStyleTo(newMode);
-        } else {
-            console.log(response);
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+        .then((response) => {
+            if (response.status === 200) {
+                window.localStorage.setItem("mode", newMode);
+                switchStyleTo(newMode);
+            } else {
+                console.log(response);
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 
 function switchStyleTo(mode) {
@@ -42,10 +42,10 @@ function switchStyleTo(mode) {
 function logoutUser() {
     console.log("logout");
     fetch(`/logout`)
-    .then(function() {
-        document.location.href="/";
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+        .then(function () {
+            document.location.href = "/";
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }

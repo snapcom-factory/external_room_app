@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    entrypoint:
+    - sleep
+    - infinity
+    image: docker/dev-environments-default:stable-1
+    init: true
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+  external_rooms_app:
+    command: python external_rooms_app/manage.py runserver 0.0.0.0:8000
+    volumes:
+    - .:/OBTP
+  front_react:
+    command: npm run dev
+    volumes:
+    - .:/REACT

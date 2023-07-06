@@ -12,13 +12,13 @@
 </head>
 
 <body>
-    <div class="title-container">
-        <button class="switch-mode"></button>
-        <a class="title" href="{% url 'data' %}">OBTP plug-in</a>
-        <img class="minfin-logo" src="{% static 'minfin_logo.png' %}"/>
-        <button class="logout-button">Logout</button>
-    </div>
-    
+    <header class="title-container">
+        <a class="title" href="{% url 'data' %}">
+            <h1>OBTP plug-in</h1>
+        </a>
+        <button class="logout-btn">Logout</button>
+    </header>
+
     {% block content %}
 
     {% endblock %}

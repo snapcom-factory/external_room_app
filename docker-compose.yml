@@ -17,5 +17,3 @@ services:
     stdin_open: true
     depends_on:
       - db_obtp_plugin
-
-    

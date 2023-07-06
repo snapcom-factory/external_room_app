@@ -1,0 +1,54 @@
+.navBar {
+    height: calc(100% - var(--header-height));
+    width: var(--navBar-width);
+
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0 2rem 1rem;
+
+    background-color: white;
+    border-right: 3px solid var(--c--theme--colors--primary-700);
+}
+
+.navBar span {
+    width: 100%;
+    border-top: .1rem solid var(--c--theme--colors--primary-400);
+    margin: 1.5rem 1rem 1.5rem 0;
+}
+
+.navBar h4 {
+    font-weight: 100;
+    color: hsl(0 0% 0% / .8);
+
+    margin-bottom: .5rem;
+    padding-left: 1rem;
+}
+
+.navBar a {
+    color: inherit;
+    font-weight: 500;
+
+    padding: .5rem;
+    padding-left: 1.5rem;
+
+    border-radius: .5rem 0 0 .5rem;
+
+    background-color: inherit;
+    transition: all 250ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.navBar a:hover {
+    background-color: var(--c--theme--colors--primary-400);
+    transition: all 250ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.navBar a.active {
+    color: white;
+    background-color: var(--c--theme--colors--primary-700);
+    transition: all 250ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.navBar a.active:hover {
+    background-color: var(--c--theme--colors--primary-500);
+    transition: all 250ms cubic-bezier(0.65, 0, 0.35, 1);
+}

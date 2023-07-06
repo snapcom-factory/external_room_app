@@ -1,0 +1,57 @@
+@import "@openfun/cunningham-react/fonts";
+@import "@openfun/cunningham-react/icons";
+@import "@openfun/cunningham-react/style";
+@import "./cunningham-tokens";
+@import "./constants/fonts.css";
+
+
+:root {
+  font-family: var(--c--theme--font--families--base);
+  line-height: 1.5;
+  font-size: 16px;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --navBar-width: 13rem;
+  --header-height: 5rem;
+
+}
+
+::before,
+::after,
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.noselect {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.wrapper {
+  background-color: var(--c--theme--colors--primary-100);
+
+  margin-bottom: 1rem;
+  padding: 1rem;
+
+  border-radius: .5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {}

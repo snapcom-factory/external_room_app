@@ -1,94 +1,82 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
-<div class="flex-container">
-  <div class="add-data-container">
-    <!-- <h3>Ajouter des salles à la base de données</h3> -->
-    <div class="form_div">
-      <form class="form" enctype="multipart/form-data" method="POST" action="">
-        {% csrf_token %}
-        {{ form_csv.as_p }}
-        <div class="flex-container">
-          <input class="submit-btn" type="submit" name="database-load" value="Charger la BDD">
-        </div>
-      </form>
-    </div>
-    <button class="delete-button" id="delete-data">Supprimer la BDD</button>
-  </div>
-</div>
+
+<form class="form" enctype="multipart/form-data" method="POST" action="">
+  {% csrf_token %}
+  {{ form_csv.as_p }}
+  <button class="delete-button" id="delete-data">Supprimer la BDD</button>
+  <input class="submit-btn" type="submit" name="database-load" value="Charger la BDD">
+</form>
+
 
 <div class="infos-bdd">
-
-  <div class="rooms">
-    <h3 class="category-title">SALLES</h3>
-    <div class="add-room-button">
-      <a href="{% url 'add-room' %}">Ajouter une salle</a>
-    </div>
-    <div class="infos-rooms">
+  <div class="wrapper" data="salles">
+    <table id="salles">
+      <caption>
+        <h3>SALLES</h3>
+        <a href="{% url 'add-room' %}">
+          <button>Ajouter une salle</button>
+        </a>
+      </caption>
+      <tr>
+        <th>Nom</th>
+        <th>Bâtiment</th>
+        <th>Étage</th>
+        <th>Capacité</th>
+      </tr>
       {% for room in rooms %}
-      <div class="one-room">
-        <h4 class="room-name">
+      <tr>
+        <td data-cell="name">
           <a href="{% url 'room' room.id %}">{{ room.name }}</a>
-        </h4>
-        <ul class="room-some-infos">
-          <!-- <li>Name : <a href="{% url 'room' room.id %}">{{ room.name }}</a></li> -->
-          <li class="building-name">Bâtiment :
-            {% if room.building_id != None %} <a href="{% url 'building' room.building_id.id %}">{{ room.building_id.name }}</a> 
-            {% else %} Unknown
-            {% endif %}
-          </li>
-          <li>Étage : {{ room.floor }}</li>
-          <li>Capacité : {{ room.capacity }}</li>
-        </ul>
-      </div>
+        </td>
+        <td data-cell="building">
+          {% if room.building_id != None %}
+          <a href="{% url 'building' room.building_id.id %}">{{room.building_id.name}}</a>
+          {% else %} Unknown
+          {% endif %}
+        </td>
+        <td data-cell="floor">{{ room.floor }}</td>
+        <td data-cell="capacity">{{ room.capacity }}</td>
+      </tr>
       {% endfor %}
-    </div>
+    </table>
   </div>
 
-  <!-- <hr /> -->
-
-  <div class="buildings">
-    <h3 class="category-title">BÂTIMENTS</h3>
-    <div class="add-building-button">
-      <a  href="{% url 'add-building' %}">Ajouter un bâtiment</a>
-    </div>
-    <div class="infos-buildings">
+  <div class="wrapper" data="buildings">
+    <table id="bâtiments">
+      <caption>
+        <h3>BÂTIMENTS</h3>
+        <a href="{% url 'add-building' %}">
+          <button>Ajouter un bâtiment</button>
+        </a>
+      </caption>
+      <tr>
+        <th>Nom</th>
+        <th>Adresse</th>
+        <th>Ville</th>
+        <th>Code postal</th>
+        <th>Id</th>
+      </tr>
       {% for building in buildings %}
-      <div class="one-building">
-        <h4 class="building-name">
+      <tr>
+        <td data-cell="name">
           <a href="{% url 'building' building.id %}">{{ building.name }}</a>
-        </h4>
-        <ul class="building-some-infos">
-          <li>Adresse : {{ building.address }}</li>
-          <li>Ville : {{ building.city }}</li>
-          <li>Code Postal : {{ building.postal_code }}</li>
-          <li>Id : {{ building.id }}</li>
-        </ul>
-      </div>
+        </td>
+        <td data-cell="adress">{{ building.address }}</td>
+        <td data-cell="city">{{ building.city }}</td>
+        <td data-cell="postal-code">{{ building.postal_code }}</td>
+        <td data-cell="buildin-id">{{ building.id }}</td>
+      </tr>
       {% endfor %}
-    </div>
+    </table>
   </div>
-</div>
 
-<div class="flex-container">
-  <div class="add-data-container">
-    <div class="form_div">
-      <h2>Créer une réunion</h2>
-      <form class="form" enctype="multipart/form-data" method="POST" action="">
-        {% csrf_token %}
-        {{ form_meeting.as_p }}
-
-        <div class="flex-container">
-          <input class="submit-btn" type="submit" name="create-meeting" value="Créer">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="flex-container">
-  {% if rooms %}
+  <div class="flex-container">
+    {% if rooms %}
     <button id="init-button">INIT CISCO</button>
-  {% endif %}
+    {% endif %}
+  </div>
+
 </div>
 
 <script src="{% static 'script.js' %}"></script>

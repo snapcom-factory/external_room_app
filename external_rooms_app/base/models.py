@@ -28,8 +28,7 @@ class Room(models.Model):
 
     # Infos pour magnify et les terminaux
     ip_terminal = models.CharField(max_length=200, unique=True)
-    serial_number = models.CharField(
-        max_length=200, unique=True, null=True, blank=True)
+    serial_number = models.CharField(max_length=200, unique=True, null=True, blank=True)
     terminal_type = models.CharField(max_length=200, null=True, blank=True, choices=(("cisco", "cisco"), ("pulse", "pulse")))
     is_init = models.BooleanField(default=False)
     password_keycloak = models.CharField(max_length=300, null=True, blank=True)

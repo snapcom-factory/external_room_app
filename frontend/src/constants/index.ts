@@ -1,0 +1,8 @@
+export const ROOMS = 'http://localhost:8000/api/rooms/'
+export const BUILDINGS = 'http://localhost:8000/api/buildings/'
+export const BDD = 'http://localhost:8000/api/bdd/'
+export const INFOS_INIT = 'http://localhost:8000/api/infos/'
+export const INFOS_ROOM = 'http://localhost:8000/api/infos-rooms/'
+export const INFOS_BUILDING = 'http://localhost:8000/api/rooms/'
+export const ADD_ROOM = 'http://localhost:8000/add-room/'
+export const PERIPHERALS = ''

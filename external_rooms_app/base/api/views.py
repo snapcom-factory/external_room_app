@@ -59,17 +59,17 @@ def modify_bdd(request):
             new_room.password_keycloak = room["password_keycloak"]
             new_room.terminal_type = room["terminal_type"]
 
-        new_room.is_init = room["is_init"]
-        new_room.ip_terminal = room["ip_terminal"]
-        new_room.name = room["name"]
-        new_room.number = room["number"]
-        new_room.building_id = Building.objects.get(name=room["building_name"])
-        new_room.floor = room["floor"]
-        new_room.capacity = room["capacity"]
-        new_room.has_windows = room["has_windows"]
-        new_room.direction = room["direction"]
+            new_room.is_init = room["is_init"]
+            new_room.ip_terminal = room["ip_terminal"]
+            new_room.name = room["name"]
+            new_room.number = room["number"]
+            new_room.building_id = Building.objects.get(name=room["building_name"])
+            new_room.floor = room["floor"]
+            new_room.capacity = room["capacity"]
+            new_room.has_windows = room["has_windows"]
+            new_room.direction = room["direction"]
 
-        new_room.save()
+            new_room.save()
 
     return HttpResponse("<h1>Normalement c'est updated </h1>")
 
