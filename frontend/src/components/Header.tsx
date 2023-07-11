@@ -1,4 +1,4 @@
-import './styles/Header.css'
+import '../styles/Header.css'
 import logo from '../assets/marianne.svg'
 import { Button } from "@openfun/cunningham-react";
 

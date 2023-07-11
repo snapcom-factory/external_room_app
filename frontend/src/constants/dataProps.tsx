@@ -1,5 +1,4 @@
-import { Button } from "@openfun/cunningham-react"
-import { BUILDINGS, ROOMS, PERIPHERALS } from './';
+import { BUILDINGS, ROOMS, } from '.';
 
 export const buildingProps = {
     urlName: BUILDINGS,
@@ -8,25 +7,24 @@ export const buildingProps = {
     addBtnName: 'un emplacement',
     columns: [
         {
-            field: "name",
-            headerName: "Nom",
-            highlight: true
+            header: "ID",
+            accessorKey: "id",
         }, {
-            field: "adress",
-            headerName: "Adresse"
+            header: "Nom",
+            accessorKey: "name",
         }, {
-            field: "city",
-            headerName: "Ville",
+            accessorKey: "adress",
+            header: "Adresse"
         }, {
-            field: "postal_code",
-            headerName: "Code postal",
+            header: "Ville",
+            accessorKey: "city",
         }, {
-            field: "country",
-            headerName: "Pays",
+            header: "Code postal",
+            accessorKey: "postal_code",
         }, {
-            field: "id",
-            headerName: "ID",
-        }
+            header: "Pays",
+            accessorKey: "country",
+        },
     ]
 }
 
@@ -37,51 +35,52 @@ export const roomProps = {
     addBtnName: 'une salle',
     columns: [
         {
-            field: "name",
-            headerName: "Nom",
-            highlight: true
+            header: "ID",
+            accessorKey: "id",
         }, {
-            field: "number",
-            headerName: "Numéro",
+            header: "Nom",
+            accessorKey: "name",
         }, {
-            field: "building_id",
-            headerName: "Emplacement",
+            header: "N°",
+            accessorKey: "number",
         }, {
-            field: "floor",
-            headerName: "Étage",
+            header: "Emplacement",
+            accessorKey: "building_id",
         }, {
-            field: "direction",
-            headerName: "Direction"
+            header: "Étage",
+            accessorKey: "floor",
         }, {
-            field: "capacity",
-            headerName: "Capacité",
+            header: "Direction",
+            accessorKey: "direction",
+        }, {
+            header: "Capacité",
+            accessorKey: "capacity",
         }
     ]
-
 }
 
 export const periphProps = {
     // urlName: PERIPHERALS,
-    urlName: BUILDINGS,
+    urlName: ROOMS,
     tableName: 'Périphériques',
     queryKey: 'periphsQKey',
     addBtnName: 'un périphérique',
     columns: [
         {
-            field: "ip_terminal",
-            headerName: "IP",
-            highlight: true
+            header: "ID",
+            accessorKey: "id",
         }, {
-            field: "serial_number",
-            headerName: "Numéro de série"
+            accessorKey: "ip_terminal",
+            header: "IP",
         }, {
-            field: "terminal_type",
-            headerName: "Model",
-            highlight: false
+            accessorKey: "serial_number",
+            header: "Numéro de série"
         }, {
-            field: "is_Init",
-            headerName: "État",
-            enableSorting: false
+            accessorKey: "terminal_type",
+            header: "Model",
+        }, {
+            accessorKey: "is_Init",
+            header: "État",
         }
     ]
 }

@@ -1,10 +1,13 @@
 .globalHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: var(--header-height);
     max-height: var(--header-height);
 
     display: grid;
-    align-items: center;
+    align-content: center;
 
     grid-template-columns: var(--navBar-width);
     grid-template-rows: auto;

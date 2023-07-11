@@ -17,6 +17,7 @@
     "@mui/material": "^5.13.6",
     "@openfun/cunningham-react": "^0.8.2",
     "@openfun/cunningham-tokens": "^0.4.0",
+    "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",

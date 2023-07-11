@@ -1,0 +1,39 @@
+.basic-table {
+    width: 100%;
+    overflow: hidden;
+    border-collapse: collapse;
+    border-radius: .75rem;
+    box-shadow: 0px 0px 3px hsl(0 0% 0% / 0.25);
+}
+
+
+.basic-table th {
+    padding: .75rem;
+    text-align: left;
+    font-size: 14px;
+}
+
+.basic-table td {
+    padding: .5rem;
+    font-size: 14px;
+}
+
+.basic-table th,
+.basic-table td {
+    padding-inline: 1.5rem calc(1.5rem - 24px);
+}
+
+.basic-table th,
+.basic-table tr:not(:last-child) {
+    border-bottom: 1px solid hsl(0 0% 0% / 0.15);
+}
+
+.basic-table th,
+.basic-table tr:nth-of-type(even) {
+    background-color: hsl(0 0% 0% / 0.05);
+}
+
+.sorter-icon-container {
+    width: 1.5rem;
+    height: 1.5rem;
+}
