@@ -1,4 +1,4 @@
-import '../styles/Navbar.css'
+import './Navbar.css'
 import { NavLink } from 'react-router-dom'
 import { EventRounded, Apartment, MeetingRoomRounded, TvRounded } from '@mui/icons-material/';
 
@@ -8,7 +8,9 @@ export default function Navbar() {
         <nav className='navBar'>
 
             <h4 className='noselect'>Utilisateur</h4>
-            <NavLink className={'nav-link'} to='/create-meeting'> <EventRounded className='nav-icon' />Réservation</NavLink>
+            <NavLink className={'nav-link'} to='/'> <EventRounded className='nav-icon' />Réservation</NavLink>
+
+            <span />
 
             <h4 className='noselect' id='nav-admin'>Administrateur</h4>
             <NavLink className={'nav-link'} to='/manage/buildings'><Apartment className='nav-icon' />Emplacements</NavLink>

@@ -1,6 +1,8 @@
 import React from 'react'
+
 import { CunninghamProvider, Input, DatePicker, Select } from '@openfun/cunningham-react'
 // import { Box, TextField, Autocomplete } from '@mui/material';
+
 
 export default function MeetingForm() {
 
@@ -9,9 +11,9 @@ export default function MeetingForm() {
 
     const buildings = [{ label: 'Batiment 1', value: 'bat1' }, { label: 'Batiment 2', value: 'bat2' }]
 
-    const [selectedBuilding, setSelectedBuilding] = React.useState([])
-    const [buildingValue, setBuildingValue] = React.useState('')
-    const [roomValue, setRoomValue] = React.useState('')
+    const [selectedBuilding, setSelectedBuilding] = React.useState<Array<never>>([])
+    const [buildingValue, setBuildingValue] = React.useState<string>('')
+    const [roomValue, setRoomValue] = React.useState<string>('')
 
 
 

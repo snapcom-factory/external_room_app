@@ -112,10 +112,5 @@ export default {
             "ease-in-out": "cubic-bezier(0.65,0, 0.35,1)",
             "duration": "250ms"
         }
-    },
-    components: {
-        field: {
-            "width": "16rem",
-        },
     }
 };

@@ -1,20 +1,36 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+
+//* Authentification
+import AuthContextProvider from "./services/AuthContextProvider";
+
+//* React Query
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+
+//* Data
+import DataContextProvider from './data/Queries.tsx';
+
+//* React Router
 import { BrowserRouter as Router } from 'react-router-dom'
-import App from './App.tsx'
-import './styles/index.css'
+
+//* Components
+import App from './App'
+import './index.css'
 
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <App />
-      </Router>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
-  </React.StrictMode>,
+    <AuthContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <DataContextProvider>
+          <Router>
+            <App />
+          </Router>
+        </DataContextProvider>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </AuthContextProvider>
+  </React.StrictMode>
 )

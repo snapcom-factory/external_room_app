@@ -1,5 +1,3 @@
-import { PostAdd } from "@mui/icons-material"
-
 export default function DatabaseForm() {
 
     function handleNewDbFile() {

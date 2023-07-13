@@ -1,10 +1,12 @@
-import Filter from './Filter'
 import * as React from 'react'
+
+import Filter from './Filter'
+
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { Tune, ExpandMore } from '@mui/icons-material';
 
 
-export default function FiltersContainer() {
+export default function FiltersContainer(props: any) {
     const [isExpanded, setIsExpanded] = React.useState(Boolean)
 
     return (
@@ -20,9 +22,7 @@ export default function FiltersContainer() {
             </AccordionSummary>
             <AccordionDetails>
                 <div className="filters-inputs ">
-                    <Filter labelName={'Nom'}></Filter>
-                    <Filter labelName={'Numéro'}></Filter>
-                    <Filter labelName={'Étage'}></Filter>
+                    {props.columns.map((field: any) => <Filter key={field.header} labelName={field.header} />)}
                 </div>
             </AccordionDetails>
         </Accordion>

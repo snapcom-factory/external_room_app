@@ -12,6 +12,7 @@ export const buildingProps = {
         }, {
             header: "Nom",
             accessorKey: "name",
+            enableColumnFilter: true,
         }, {
             accessorKey: "adress",
             header: "Adresse"

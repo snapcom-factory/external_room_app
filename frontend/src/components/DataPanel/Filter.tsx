@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import { Box, TextField, Autocomplete } from '@mui/material';
 
-export default function Filter({ ...props }) {
+
+export default function Filter(props: any) {
 
     const [value, setValue] = React.useState([]);
     const [inputValue, setInputValue] = React.useState();
@@ -12,11 +13,11 @@ export default function Filter({ ...props }) {
             <Autocomplete
                 sx={{}}
                 value={value}
-                onChange={(event, newValue) => {
+                onChange={(event, newValue: any) => {
                     setValue(newValue);
                 }}
                 inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
+                onInputChange={(event, newInputValue: any) => {
                     setInputValue(newInputValue);
                 }}
                 multiple

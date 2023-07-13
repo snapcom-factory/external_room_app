@@ -1,8 +1,8 @@
 @import "@openfun/cunningham-react/fonts";
 @import "@openfun/cunningham-react/icons";
 @import "@openfun/cunningham-react/style";
-@import "./constants/cunningham-tokens.css";
-@import "./constants/fonts.css";
+@import "./styles/cunningham-tokens.css";
+@import "./styles/fonts.css";
 
 
 :root {
@@ -17,8 +17,19 @@
   -webkit-text-size-adjust: 100%;
 
   --navBar-width: 13rem;
-  --header-height: 12vh;
 
+  --navBar-left-offset: 0px;
+  --header-height: 10vh;
+}
+
+@media screen and (max-width: 1200px) {
+  :root {
+    --navBar-left-offset: -10rem;
+  }
+
+  .navbar h4 {
+    display: none;
+  }
 }
 
 ::before,
