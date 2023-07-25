@@ -1,21 +1,5 @@
 from django import forms
-from .models import Room, Building
-
-
-class RoomForm(forms.ModelForm):
-
-    class Meta:
-        model = Room
-        # fields = "__all__"
-        fields = ["name", "number", "building_id", "terminal_type", "floor",
-                  "direction", "capacity", "has_windows", "ip_terminal"]
-
-
-class BuildingForm(forms.ModelForm):
-
-    class Meta:
-        model = Building
-        fields = "__all__"
+from .models import Room
 
 
 class CSVForm(forms.Form):

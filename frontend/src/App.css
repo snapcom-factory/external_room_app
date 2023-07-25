@@ -104,11 +104,9 @@
 }
 
 .filters-inputs {
-    display: flex;
-    align-items: center;
-    justify-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+    gap: 1rem;
 }
 
 .table-title {
@@ -118,6 +116,7 @@
     justify-content: space-between;
     padding-inline: .5rem;
 }
+
 
 
 .error {

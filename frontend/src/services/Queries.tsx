@@ -1,17 +1,17 @@
 import React from "react";
 
 //* React Query
-import { useQuery } from "react-query";
+import { UseQueryResult, useQuery } from "react-query";
 
 //* API
-import * as api from '../services/api'
+import * as api from './api'
 import * as URL from '../constants'
 
 
 interface DataContextValues {
-    buildings: any | unknown;
-    rooms: any | unknown;
-    peripherals: any | unknown;
+    buildings: UseQueryResult;
+    rooms: UseQueryResult;
+    peripherals: UseQueryResult;
 }
 
 const defaultDataContextValues: DataContextValues = {
@@ -43,7 +43,7 @@ const DataContextProvider = (props: DataContextProviderProps) => {
 
     const peripherals = useQuery({
         queryKey: ['peripherals'],
-        queryFn: () => api.getData(URL.ROOMS)
+        queryFn: () => api.getData(URL.PERIPHERALS)
     })
 
     return (

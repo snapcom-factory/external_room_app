@@ -4,11 +4,6 @@ FAKE_DATA = {
     "rooms":
         [
             {
-                "serial_number": "1OOE901A17",
-                "ip_terminal": "10.194.18.16",
-                "terminal_type": "CISCO",
-                "is_init": False,
-
                 "name": "roomA",
                 "number": 10,
                 "building_name": "Cool&Workers",
@@ -18,11 +13,6 @@ FAKE_DATA = {
                 "direction": "Direction des renseignements",
             },
             {
-                "serial_number": "13726EBA35",
-                "ip_terminal": "12.40.50.90",
-                "terminal_type": "PULSE",
-                "is_init": False,
-
                 "name": "roomB",
                 "number": 20,
                 "building_name": "Cool&Workers",
@@ -32,12 +22,6 @@ FAKE_DATA = {
                 "direction": "Direction des autres",
             },
             {
-                "serial_number": "EJSHDJH3874610",
-                "ip_terminal": "196.54.12.30",
-                "terminal_type": "CISCO",
-                "is_init": True,
-                "password_keycloak": "23768920983efejhfdbz",
-
                 "name": "roomC",
                 "number": 1,
                 "building_name": "Eiffel",
@@ -47,12 +31,6 @@ FAKE_DATA = {
                 "direction": "Direction de la direction",
             },
             {
-                "serial_number": "99029874EGGFS",
-                "ip_terminal": "82.54.30.12",
-                "terminal_type": "CISCO",
-                "is_init": True,
-                "password_keycloak": "2376ezezdbq232438dqkjdqkzjkqef",
-
                 "name": "roomD",
                 "number": 40,
                 "building_name": "Eiffel",
@@ -77,6 +55,39 @@ FAKE_DATA = {
                 "city": "Gif-sur-Yvette",
                 "postal_code": "91190",
                 "country": "FRANCE"
-            }
-        ]
+            },
+        ],
+    "terminals":
+        [
+            {
+                "room_name": "roomA",
+                "serial_number": "1OOE901A17",
+                "ip_terminal": "10.194.18.16",
+                "terminal_type": "CISCO",
+                "is_init": False,
+            },
+            {
+                "room_name": "roomB",
+                "serial_number": "13726EBA35",
+                "ip_terminal": "12.40.50.90",
+                "terminal_type": "PULSE",
+                "is_init": False,
+            },
+            {
+                "room_name": "roomC",
+                "serial_number": "EJSHDJH3874610",
+                "ip_terminal": "196.54.12.30",
+                "terminal_type": "CISCO",
+                "is_init": True,
+                "password_keycloak": "23768920983efejhfdbz",
+            },
+            {
+                "room_name": "roomD",
+                "serial_number": "99029874EGGFS",
+                "ip_terminal": "82.54.30.12",
+                "terminal_type": "CISCO",
+                "is_init": True,
+                "password_keycloak": "2376ezezdbq232438dqkjdqkzjkqef",
+            },
+        ],
 }

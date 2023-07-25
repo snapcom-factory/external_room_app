@@ -1,9 +1,7 @@
 import React from 'react'
 import './Header.css'
-import logo from '../assets/marianne.svg'
+import logo from '../../public/assets/marianne.svg'
 import { Button } from "@openfun/cunningham-react";
-import { IconButton } from '@mui/material';
-import { InfoRounded } from "@mui/icons-material";
 import { AuthContext } from '../services/AuthContextProvider';
 
 

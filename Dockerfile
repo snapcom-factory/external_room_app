@@ -1,5 +1,7 @@
 FROM python:3.10-buster as base
 
+FROM base as backend
+
 RUN apt-get update
 RUN apt-get install nano
 
@@ -14,3 +16,14 @@ RUN pip install --upgrade pip
 
 COPY ./requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
+
+
+# FROM node:18 as frontend
+
+# WORKDIR /OBTP
+
+# RUN mkdir front-react
+
+# COPY ./build ./frontend/build
+
+# EXPOSE 5173

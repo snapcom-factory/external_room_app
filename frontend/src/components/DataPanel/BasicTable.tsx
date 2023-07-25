@@ -35,7 +35,7 @@ export default function BasicTable({ ...props }) {
     const table = React.useMemo(() => props.table, [props.table])
 
     return (
-        <div>
+        <>
 
             <table className='basic-table'>
                 <thead>
@@ -77,20 +77,23 @@ export default function BasicTable({ ...props }) {
                         </tr>
                     )}
                 </tbody>
+                {(table.getPageCount() > 1 ?
+                    <>
+                        <p style={{ paddingRight: '1rem', fontSize: '14px' }}>
+                            {`Page ${table.getState().pagination.pageIndex + 1} of ${table.getPageCount()}`}
+                        </p>
+                        <ButtonGroup size='small'>
 
-            </table>
-
-            {(table.getPageCount() > 1 ?
-                <ButtonGroup size='small' sx={{ position: 'fixed', bottom: '10px' }}>
-                    <IconButton size='small' onClick={() => table.setPageIndex(0)}><FirstPageRounded /></IconButton>
-                    <IconButton size='small' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}><NavigateBeforeRounded /></IconButton>
-                    {/* <input type="number" /> */}
-                    <IconButton size='small' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}><NavigateNextRounded /></IconButton>
-                    <IconButton size='small' onClick={() => table.setPageIndex(table.getPageCount() - 1)}><LastPageRounded /></IconButton>
-                </ButtonGroup>
-                : null)
-            }
-
-        </div>
+                            <IconButton size='small' onClick={() => table.setPageIndex(0)}><FirstPageRounded fontSize='small' /></IconButton>
+                            <IconButton size='small' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}><NavigateBeforeRounded fontSize='small' /></IconButton>
+                            {/* <input type="number" /> */}
+                            <IconButton size='small' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}><NavigateNextRounded fontSize='small' /></IconButton>
+                            <IconButton size='small' onClick={() => table.setPageIndex(table.getPageCount() - 1)}><LastPageRounded fontSize='small' /></IconButton>
+                        </ButtonGroup>
+                    </>
+                    : null)
+                }
+            </table >
+        </>
     )
 }

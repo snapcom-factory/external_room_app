@@ -1,24 +1,33 @@
 import * as React from 'react'
-import * as api from '../../services/api'
+// import * as api from '../../services/api'
 
 //* React(/TanStack) Table
-import { useReactTable, getCoreRowModel, getSortedRowModel, SortingState, getPaginationRowModel, getFilteredRowModel } from '@tanstack/react-table'
+import {
+  useReactTable, getCoreRowModel,
+  getSortedRowModel, SortingState,
+  getPaginationRowModel,
+  getFilteredRowModel, ColumnFiltersState,
+} from '@tanstack/react-table'
 
 //* Components
 import FiltersContainer from "./FiltersContainer";
 import BasicTable from './BasicTable'
-import Form from '../Forms/Form';
-import NewDataForm from '../Forms/NewDataForm';
+import NewRoom from '../Forms/NewRoom';
+import NewBuilding from '../Forms/NewBuilding';
+import NewPeripheral from '../Forms/NewPeripheral';
+// import NewDataForm from '../Formsold/NewDataForm';
+
+import { DataContext } from '../../services/Queries';
 
 //* UI
+import { MantineProvider } from '@mantine/core';
 import { Button, TextField, Backdrop, Fade, Modal, Box, InputAdornment } from "@mui/material";
 import { AddCircle, SearchRounded } from '@mui/icons-material';
-import { DataContext } from '../../data/Queries';
 
 
-export default function DataPanel(props: any | unknown) {
+export default function DataPanel(props: any | unknown | string) {
 
-  const db = React.useContext(DataContext)
+  const db = React.useContext<any>(DataContext)
 
   const [tooSmall, setTooSmall] = React.useState(() => window.innerWidth < screen.width / 2 ? true : false)
   window.addEventListener('resize', () => setTooSmall(window.innerWidth < screen.width / 2 ? true : false))
@@ -36,36 +45,43 @@ export default function DataPanel(props: any | unknown) {
   const handleClose = () => setOpen(false);
 
 
-  const data = React.useMemo(() => db.rooms.data, [db])
+  const data = React.useMemo(() => db[props.dataType].data, [db, props.dataType])
 
+  const [rowSelection, setRowSelection] = React.useState({})
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = React.useState<string>('')
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
   const table = useReactTable({
     data,
     columns: props.columns,
     state: {
+      rowSelection: rowSelection,
       sorting: sorting,
       globalFilter: globalFilter,
+      columnFilters: columnFilters,
     },
     enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
 
-    // debugTable: true,
+    debugTable: true,
   })
 
+  React.useEffect(() => { table.setPageSize(8); console.log(db[props.dataType].data) }, [table, db, props.dataType])
 
   return (
     <>
       <div className="wrapper data-panel">
 
         {/* Filtres */}
-        {data?.length ? <FiltersContainer {...props} /> : null}
+        {data?.length ? <FiltersContainer table={table} /> : null}
 
 
         {/* Titre */}
@@ -115,9 +131,10 @@ export default function DataPanel(props: any | unknown) {
       >
         <Fade in={open}>
           <Box sx={modalStyle}>
-            <Form formTitle={'Ajouter ' + `${props.addBtnName}`} submitTitle={'Ajouter'} apiAction={api.addData} urlName={props.urlName}>
-              <NewDataForm {...props} />
-            </Form>
+
+            <MantineProvider>
+              {props.dataType == 'buildings' ? <NewBuilding /> : props.dataType == 'rooms' ? <NewRoom /> : <NewPeripheral />}
+            </MantineProvider>
           </Box>
         </Fade>
       </Modal >

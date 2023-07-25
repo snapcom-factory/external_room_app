@@ -1,31 +1,44 @@
 import axios from 'axios'
 
 const mainApi = axios.create({
-    baseURL: 'http://localhost:8000/api '
+    baseURL: 'http://localhost:8000/'
 })
+
+export const createMeeting = async (urlName: string, newMeeting: unknown) => {
+    return await mainApi.post(urlName, newMeeting)
+}
 
 export const getData = async (urlName: string) => {
     const res = await mainApi.get(urlName)
     return res.data
 }
 
-export const addData = async (urlName: string, newData: unknown) => {
-    return await mainApi.post(urlName, newData)
+export const addData = async (urlName: string, newData: any) => {
+    console.log('FROM API : ', 'url : ', urlName)
+    console.log('FROM API : ', 'newData : ', newData)
+    console.log('FROM API : ', 'stringified : ', JSON.stringify(newData))
+    await mainApi.post(urlName, JSON.stringify(newData), {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then((response) => {console.log('FROM SERVER : ', 'res : ', response) })
+        .catch((error) => console.log(error))
 }
 
-export const modData = async (urlName: string, toMod: unknown) => {
-    return await mainApi.patch(urlName, toMod)
+export const deleteData = async (urlName: string) => {
+    console.log('FROM API : ', 'url : ', urlName)
+    await mainApi.delete(urlName)
+        .then((response) => console.log('FROM SERVER : ', 'res : ', response))
+        .catch((error) => console.log(error))
 }
 
-export const deleteData = async (urlName: string, toDelete: never) => {
-    return await mainApi.delete(urlName, toDelete)
-}
-
-export const createMeeting = async (urlName: string, newMeeting: unknown) => {
-    return await mainApi.post(urlName, newMeeting)
-}
-
-// export const logOut = async () => {}
+// export const initDevice = async (urlName: string) => {
+//     console.log('FROM API : ', 'url : ', urlName)
+//     await mainApi.get(urlName)
+//         .then((response) => console.log('FROM SERVER : ', 'res : ', response))
+//         .catch((error) => console.log(error))
+// }
 
 
 export default mainApi
