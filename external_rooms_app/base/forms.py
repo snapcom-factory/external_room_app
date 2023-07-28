@@ -59,7 +59,7 @@ class MeetingForm(forms.Form):
 
     name_meeting = forms.CharField(label="Nom ", widget=forms.TextInput(attrs={"placeholder": "Nom de la réunion", "style": "width: 100%;", "class": "form-control", "autofocus": "true"}))
 
-    start_date = forms.DateTimeField(label="Date et heure (Y-m-d H:M:S) ", widget=forms.TextInput(attrs={"placeholder": "Date de la réunion", "style": "width: 100%;", "class": "form-control"}))
+    start_date = forms.DateTimeField(label="Date et heure (Y-m-d H:M:S) ", widget=forms.DateTimeInput(attrs={"placeholder": "Date de la réunion", "style": "width: 100%;", "class": "form-control"}))
 
     def get_my_choices(self):
         return [(room.name, room.name) for room in Room.objects.filter(is_init = True)]
