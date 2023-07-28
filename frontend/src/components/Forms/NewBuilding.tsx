@@ -2,6 +2,7 @@ import React from 'react'
 
 import * as api from '../../services/api'
 import * as URL from '../../constants'
+import * as Types from './interfaces'
 
 import { useQueryClient } from 'react-query'
 
@@ -10,22 +11,16 @@ import { useQueryClient } from 'react-query'
 import { TextInput, Box } from '@mantine/core';
 import { useForm, hasLength } from '@mantine/form';
 
-import FormBtns from './FormBtns';
+import FormBtns from '../Buttons/FormBtns';
 
-interface FormValues {
-    name: string,
-    address: string,
-    city: string,
-    postal_code: string,
-    country: string,
-}
 
-const defaultFormValues: FormValues = {
+
+const defaultFormValues: Types.Building = {
     name: '',
     address: '',
     city: '',
     postal_code: '',
-    country: '',
+    country: undefined,
 }
 
 
@@ -44,7 +39,9 @@ export default function NewBuilding() {
     const [isSubmiting, setIsSubmiting] = React.useState<boolean>(false)
 
     const queryClient = useQueryClient()
-    const handleSubmit = async (values: FormValues) => {
+
+
+    const handleSubmit = async (values: Types.Building) => {
         setIsSubmiting(true)
         console.log('submitting new building ... : ', values)
         await api.addData(URL.ADD_BUILDING, values)

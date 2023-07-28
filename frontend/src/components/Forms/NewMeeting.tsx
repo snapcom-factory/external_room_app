@@ -1,28 +1,25 @@
 import React from 'react'
+import dayjs from 'dayjs'
 
 import * as api from '../../services/api'
+import * as URL from '../../constants'
+import * as Types from './interfaces'
 
 import { DataContext } from '../../services/Queries';
 
-import { TextInput, Select, Indicator, Box } from '@mantine/core';
+import { TextInput, MultiSelect, Indicator, Box } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates'
 import { useForm, hasLength, isNotEmpty } from '@mantine/form';
 
-import FormBtns from './FormBtns';
+import FormBtns from '../Buttons/FormBtns';
+import StateDisplay from '../StateDisplay'
 
 
-interface FormValues {
-    name: string,
-    date: string | undefined,
-    room: object | string | null,
+const defaultFormValues: Types.Meeting = {
+    name_meeting: '',
+    start_date: '',
+    rooms: '',
 }
-
-const defaultFormValues: FormValues = {
-    name: '',
-    date: '',
-    room: '',
-}
-
 
 export default function NewMeeting() {
 
@@ -30,47 +27,51 @@ export default function NewMeeting() {
 
     const buildingData = React.useMemo<any>(() => { if (db.buildings.status === 'success') return (db.buildings.data) }, [db])
     const roomData = React.useMemo<any>(() => { if (db.rooms.status === 'success') return (db.rooms.data) }, [db])
+    const peripheralData = React.useMemo<any>(() => { if (db.peripherals.status === 'success') return (db.peripherals.data) }, [db])
 
     const [options, setOptions] = React.useState<Array<any>>([])
 
     React.useEffect(() => {
-        if (db.rooms.status === 'loading') { setOptions([{ disabled: true, value: 'loading', label: 'Loading ...' }]) }
-        if (db.rooms.status === 'error') { setOptions([{ disabled: true, value: 'error', label: 'An error was encountered' }]) }
-        if (db.rooms.status === 'success') {
-            setOptions(Array.from(roomData.map((e: any) => {
-                let group;
-                buildingData.forEach((building: any) => {
-                    if (e.building_id == building.id) group = building.name
-                })
-                return {
-                    value: e.id, label: e.name, group: group
-                }
-            }
-            )))
+        if (db.rooms.isLoading) { setOptions([{ disabled: true, value: 'loading', label: "Chargement des salles ..." }]) }
+        if (db.rooms.isError) { setOptions([{ disabled: true, value: 'error', label: "Erreur rencontrée en essayant d'atteindre la base de données" }]) }
+        if (db.rooms.isSuccess) {
+            setOptions(Array.from(
+                peripheralData?.filter((terminal: Types.Terminal) => terminal.is_init)
+                    .map((terminal: Types.Terminal) => {
+                        const room = roomData.find((room: Types.Room) => room.id == terminal.room_id)
+                        const group = buildingData.find((building: Types.Building) => building.id == room.building_id).name
+                        return { value: room.name, label: room.name, group: group }
+                    })
+            ))
         }
-    }, [db.rooms.status, roomData, buildingData])
+    }, [db.rooms, peripheralData, roomData, buildingData])
 
 
     //* FORM
     const form = useForm({
         initialValues: defaultFormValues,
+        transformValues: (values: any) => ({
+            name_meeting: values.name_meeting,
+            start_date: dayjs(values.start_date).format('YYYY-MM-DD HH:mm:ss'),
+            rooms: values.rooms
+        }),
         validate: {
-            name: hasLength({ min: 1, max: 200 }, "Le nom doit faire entre 1 et 200 caractères"),
-            date: isNotEmpty("Selectionnez une date et un horraire"),
+            name_meeting: hasLength({ min: 1, max: 200 }, "Le nom doit faire entre 1 et 200 caractères"),
+            start_date: isNotEmpty("Selectionnez une date et un horraire"),
         },
     });
 
     const [isSubmiting, setIsSubmiting] = React.useState<boolean>(false)
 
-    const handleSubmit = (values: FormValues) => {
+    const handleSubmit = (values: Types.Meeting) => {
         setIsSubmiting(true)
         console.log('submitting new meeting ... : ', values)
         //! Different api than for data posting
-        api.createMeeting('add-building', values)
+        api.createMeeting(URL.NEW_MEETING, values)
         setTimeout(() => {
-            setIsSubmiting(false)
             form.reset()
-        }, 3000)
+            setIsSubmiting(false)
+        }, 300)
     }
 
     const handleReset = () => {
@@ -78,6 +79,7 @@ export default function NewMeeting() {
     }
 
     const today = new Date()
+
 
 
     return (
@@ -88,17 +90,18 @@ export default function NewMeeting() {
             <h1>Create a new meeting</h1>
 
             <TextInput
-                {...form.getInputProps('name')}
+                {...form.getInputProps('name_meeting')}
                 required
                 label="Nom"
                 placeholder="Nom de la réunion"
+                autoFocus
             />
             <DateTimePicker
-                {...form.getInputProps('date')}
+                {...form.getInputProps('start_date')}
                 required
                 label="Date et heure"
                 placeholder="Date et heure de la réunion"
-                valueFormat="DD MMM YYYY HH:mm"
+                valueFormat="DD MMMM YYYY HH:mm"
                 minDate={today}
                 // allowDeselect
                 clearable
@@ -111,18 +114,21 @@ export default function NewMeeting() {
                     );
                 }}
             />
-            <Select
-                {...form.getInputProps('room')}
+            <MultiSelect
+                {...form.getInputProps('rooms')}
                 required
-                label="Salle"
-                placeholder="Choisissez une salle"
-                data={options}
-                maxDropdownHeight={210}
+                label="Salles"
+                placeholder="Choisissez au moins deux salles"
+                data={options ? options : ['']}
+                // data={data}
+                maxDropdownHeight={220}
                 dropdownComponent="div"
                 searchable
                 nothingFound="Pas de résultat"
                 clearable
-                allowDeselect
+                dropdownPosition="bottom"
+                {...(!db.buildings.isSuccess ? { itemComponent: StateDisplay } : {})}
+            // itemComponent={StateDisplay}
             />
 
             <br />

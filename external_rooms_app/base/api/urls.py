@@ -5,6 +5,8 @@ from . import views
 urlpatterns = [
     path("ping/", views.ping, name="ping"),
     # for frontend
+    path("new-meeting/", views.create_meeting, name="new-meeting"),
+
     path("rooms/", views.get_all_rooms, name="get-rooms"),
     path("buildings/", views.get_all_buildings, name="get-buildings"),
     path("terminals/", views.get_all_terminals, name="get-terminals"),

@@ -15,8 +15,14 @@ interface DataContextValues {
 }
 
 const defaultDataContextValues: DataContextValues = {
+    // eslint-disable-next-line
+    // @ts-ignore:
     buildings: undefined,
+    // eslint-disable-next-line
+    // @ts-ignore:
     rooms: undefined,
+    // eslint-disable-next-line
+    // @ts-ignore:
     peripherals: undefined,
 }
 

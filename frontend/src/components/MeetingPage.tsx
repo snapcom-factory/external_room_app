@@ -1,13 +1,13 @@
 
 //* Components
-import Form from './forms/NewMeeting.tsx';
+import NewMeeting from './Forms/NewMeeting.tsx';
 
 
 
 export default function MeetingPage() {
     return (
         <div className='meeting-page'>
-            <Form />
+            <NewMeeting />
         </div>
     )
 }

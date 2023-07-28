@@ -10,7 +10,16 @@ services:
     - type: bind
       source: /var/run/docker.sock
       target: /var/run/docker.sock
+
   external_rooms_app:
+    image: obtp-image:1.0
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    stdin_open: true
+    depends_on:
+      - db_obtp_plugin
     command: python external_rooms_app/manage.py runserver 0.0.0.0:8000
     volumes:
-    - .:/OBTP
+      - .:/OBTP

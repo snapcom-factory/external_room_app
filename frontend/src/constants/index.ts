@@ -1,5 +1,7 @@
 const DJANGO_APP = 'localhost:8000'
 
+export const NEW_MEETING = `http://${DJANGO_APP}/api/new-meeting/`
+
 export const ROOMS = `http://${DJANGO_APP}/api/rooms/`
 export const BUILDINGS = `http://${DJANGO_APP}/api/buildings/`
 export const PERIPHERALS = `http://${DJANGO_APP}/api/terminals/`

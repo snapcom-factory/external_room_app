@@ -2,26 +2,18 @@ import React from 'react'
 
 import * as api from '../../services/api'
 import * as URL from '../../constants'
+import * as Types from './interfaces'
 
 import { useQueryClient } from 'react-query'
+
 import { DataContext } from '../../services/Queries';
 
 import { TextInput, Select, NumberInput, Checkbox, Box } from '@mantine/core';
 import { useForm, isNotEmpty, hasLength } from '@mantine/form';
 
-import FormBtns from './FormBtns';
+import FormBtns from '../Buttons/FormBtns';
 
-interface FormValues {
-    name: string,
-    number: string,
-    direction: string,
-    building_id: object | string | null,
-    floor: number | undefined,
-    capacity: number | undefined,
-    has_windows: boolean,
-}
-
-const defaultFormValues: FormValues = {
+const defaultFormValues: Types.Room = {
     name: '',
     number: '',
     direction: '',
@@ -44,8 +36,8 @@ export default function NewRoom() {
         if (db.status === 'loading') { setOptions([{ disabled: true, value: 'loading', label: 'Loading ...' }]) }
         if (db.status === 'error') { setOptions([{ disabled: true, value: 'error', label: 'An error was encountered' }]) }
         if (db.status === 'success') {
-            setOptions(Array.from(data.map((e: any) => {
-                return { value: e.id, label: e.name }
+            setOptions(Array.from(data.map((building: Types.Building) => {
+                return { value: building.id, label: building.name }
             })))
         }
     }, [db.status, data])
@@ -61,10 +53,11 @@ export default function NewRoom() {
         },
     });
 
-    // const [buildingValue, setBuildingValue] = React.useState<string | null>(null)
-    const [isSubmiting, setIsSubmiting] = React.useState<boolean>(false)
     const queryClient = useQueryClient()
-    const handleSubmit = async (values: FormValues) => {
+
+    const [isSubmiting, setIsSubmiting] = React.useState<boolean>(false)
+
+    const handleSubmit = async (values: Types.Room) => {
         setIsSubmiting(true)
         console.log('submitting new room ... : ', values)
         await api.addData(URL.ADD_ROOM, values)
@@ -113,8 +106,8 @@ export default function NewRoom() {
                 required
                 label="Emplacement"
                 placeholder="Choisissez un emplacement"
-                data={options}
-                maxDropdownHeight={210}
+                data={options ? options : ['']}
+                maxDropdownHeight={220}
                 dropdownComponent="div"
                 creatable
                 getCreateLabel={(query) => <>+ Create {query}<p>(data not handled yet)</p></>}
@@ -122,6 +115,8 @@ export default function NewRoom() {
                 nothingFound="Pas de résultat"
                 clearable
                 allowDeselect
+                dropdownPosition="bottom"
+                limit={15}
             />
             <NumberInput
                 {...form.getInputProps('floor')}

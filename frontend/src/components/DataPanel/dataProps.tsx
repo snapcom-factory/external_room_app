@@ -4,6 +4,7 @@ import * as URL from '../../constants'
 type DataProps = {
     dataType: string;
     tableName: string;
+    emptyDataMessage: string;
     addBtnName: string;
     columns: Array<object>;
 }
@@ -22,11 +23,13 @@ const actionCol = (queryKey: string, url: string) => {
 export const building: DataProps = {
     dataType: 'buildings',
     tableName: 'Emplacements',
+    emptyDataMessage: "d'emplacement",
     addBtnName: 'un emplacement',
     columns: [
         {
             header: "Nom",
-            accessorKey: "name",
+            id: 'name',
+            accessorFn: (row: any) => `${row.name} #${row.id}`,
         }, {
             accessorKey: "address",
             header: "Adresse",
@@ -39,6 +42,7 @@ export const building: DataProps = {
         }, {
             header: "Pays",
             accessorKey: "country",
+            cell: (cell: any) => cell.getValue().toUpperCase(),
         },
         actionCol('buildings', URL.DEL_BUILDING),
     ]
@@ -47,28 +51,32 @@ export const building: DataProps = {
 export const room: DataProps = {
     dataType: 'rooms',
     tableName: 'Salles',
+    emptyDataMessage: "de salle",
     addBtnName: 'une salle',
     columns: [
         {
             header: "Nom",
-            accessorKey: "name",
+            id: 'name',
+            accessorFn: (row: any) => `${row.name} #${row.id}`,
         }, {
             header: "N°",
             accessorKey: "number",
             // cell: props => <div style={{ textAlign: 'end' }}>{props.getValue()}</div>,
         }, {
             header: "Emplacement",
-            accessorKey: "building_id",
-            cell: (cell: any) => { return <div>{cell.getValue()}</div> },
+            id: "building_id",
+            accessorFn: (row: any) => `Id : #${row.building_id}`,
         }, {
             header: "Étage",
-            accessorKey: "floor",
+            id: "floor",
+            accessorFn: (row: any) => !row.floor ? 'N/A' : row.floor == 1 ? `${row.floor}er` : `${row.floor}e`,
         }, {
             header: "Direction",
             accessorKey: "direction",
         }, {
             header: "Capacité",
-            accessorKey: "capacity",
+            id: "capacity",
+            accessorFn: (row: any) => !row.capacity ? 'N/A' : row.capacity == 1 ? `${row.capacity} place` : `${row.capacity} places`,
         },
         actionCol('rooms', URL.DEL_ROOM),
     ]
@@ -77,6 +85,7 @@ export const room: DataProps = {
 export const peripheral: DataProps = {
     dataType: 'peripherals',
     tableName: 'Périphériques',
+    emptyDataMessage: "de périphérique",
     addBtnName: 'un périphérique',
     columns: [
         // { header: 'id', accessorKey: 'id' },
@@ -85,10 +94,12 @@ export const peripheral: DataProps = {
             accessorKey: "ip_terminal",
         }, {
             header: "Salle",
-            accessorKey: "room_id",
+            id: 'room',
+            accessorFn: (row: any) => `Id : #${row.room_id}`,
         }, {
             header: "Model",
             accessorKey: "terminal_type",
+            cell: (cell: any) => cell.getValue().toUpperCase(),
         }, {
             header: "Numéro de série",
             id: 'serialNb',

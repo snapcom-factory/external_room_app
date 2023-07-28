@@ -19,31 +19,25 @@ from cisco.cisco import cisco_init
 from keycloak import create_user, get_OIDC, get_meetings
 
 from . import script_meetings
-from .utils_meeting import only_3_next_meetings
+from .utils_meeting import only_3_next_meetings, handle_meeting_creation
 
 # Create your views here.
 
 @api_view(['GET'])
-def ping(request):
+def ping():
     return Response("ping OK")
 
 
 @api_view(['POST'])
 def create_meeting(request):
-            form_meeting = MeetingForm(request.POST)
-            if form_meeting.is_valid():
-                data = form_meeting.cleaned_data
-                handle_meeting_creation(data)
+    data=request.data
+    handle_meeting_creation(data)
+    return Response(data)
 
-                return redirect("data")
-        
-        form_csv= CSVForm()
-        form_meeting = MeetingForm()
-
-        rooms = Room.objects.all()
-        buildings = Building.objects.all()
-        context = {"rooms": rooms, "buildings": buildings, "form_csv": form_csv, "form_meeting" : form_meeting}
-        return render(request, 'data.html', context)
+#         form_meeting = MeetingForm(request.POST)
+#         if form_meeting.is_valid():
+#             data = form_meeting.cleaned_data
+#             handle_meeting_creation(data)
 
 
 @api_view(['GET'])

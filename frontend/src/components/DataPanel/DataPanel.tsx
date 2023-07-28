@@ -71,10 +71,10 @@ export default function DataPanel(props: any | unknown | string) {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
 
-    debugTable: true,
+    // debugTable: true,
   })
 
-  React.useEffect(() => { table.setPageSize(8); console.log(db[props.dataType].data) }, [table, db, props.dataType])
+  React.useEffect(() => table.setPageSize(8), [table])
 
   return (
     <>
@@ -89,13 +89,13 @@ export default function DataPanel(props: any | unknown | string) {
 
           <h3>{props.tableName} :</h3>
 
-          <TextField sx={{ flexGrow: 1 }} disabled={data ? false : true} value={data ? globalFilter : "Pas de données"} label="" id="standard-search" type="search" variant="standard" size='small'
+          <TextField disabled={data ? false : true} sx={{ flexGrow: 1 }} value={data ? globalFilter : "Pas de données"} label="" id="standard-search" type="search" variant="standard" size='small'
             InputProps={{ startAdornment: (<InputAdornment position='start'><SearchRounded /></InputAdornment>) }}
             onChange={e => setGlobalFilter(e.target.value)}
 
           />
 
-          <Button variant="contained" size="small" startIcon={<AddCircle fontSize="small" />} id='primary-btn' onClick={handleOpen}>
+          <Button disabled={data ? false : true} variant="contained" size="small" startIcon={<AddCircle fontSize="small" />} id='primary-btn' onClick={handleOpen}>
             Ajouter {tooSmall ? null : props.addBtnName}
           </Button>
 
@@ -108,9 +108,12 @@ export default function DataPanel(props: any | unknown | string) {
 
 
         {/* Tableau */}
-        {data?.length ?
+        {db[props.dataType].isFetching && "Chargement de la base de données ..."}
+        {db[props.dataType].isError && "Erreur rencontrée en essayant d'atteindre la base de données"}
+        {db[props.dataType].isSuccess ? (data.length ?
           <BasicTable table={table} columns={props.columns} ></BasicTable>
-          : 'Pas de salles dans la base de données'
+          : `Pas ${props.emptyDataMessage} dans la base de données`) : null}
+        {
         }
 
       </div >
@@ -131,7 +134,6 @@ export default function DataPanel(props: any | unknown | string) {
       >
         <Fade in={open}>
           <Box sx={modalStyle}>
-
             <MantineProvider>
               {props.dataType == 'buildings' ? <NewBuilding /> : props.dataType == 'rooms' ? <NewRoom /> : <NewPeripheral />}
             </MantineProvider>

@@ -1,3 +1,4 @@
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 //* Authentification
@@ -27,22 +28,22 @@ import { DatesProvider } from '@mantine/dates'
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
-  <AuthContextProvider>
-    {/* <MantineProvider > */}
-    <DatesProvider settings={{ locale: 'fr' }}>
-      <QueryClientProvider client={queryClient}>
-        <DataContextProvider>
-          <Router>
-            <CunninghamProvider>
-              <App />
-            </CunninghamProvider>
-          </Router>
-        </DataContextProvider>
-        <ReactQueryDevtools />
-      </QueryClientProvider>
-    </DatesProvider>
-    {/* </MantineProvider> */}
-  </AuthContextProvider>
-  // </React.StrictMode >
+  <React.StrictMode>
+    <AuthContextProvider>
+      {/* <MantineProvider > */}
+      <DatesProvider settings={{ locale: 'fr' }}>
+        <QueryClientProvider client={queryClient}>
+          <DataContextProvider>
+            <Router>
+              <CunninghamProvider>
+                <App />
+              </CunninghamProvider>
+            </Router>
+          </DataContextProvider>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </DatesProvider>
+      {/* </MantineProvider> */}
+    </AuthContextProvider>
+  </React.StrictMode >
 )

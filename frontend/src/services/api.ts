@@ -4,8 +4,14 @@ const mainApi = axios.create({
     baseURL: 'http://localhost:8000/'
 })
 
-export const createMeeting = async (urlName: string, newMeeting: unknown) => {
-    return await mainApi.post(urlName, newMeeting)
+export const createMeeting = async (urlName: string, newMeeting: any) => {  
+    await mainApi.post(urlName, JSON.stringify(newMeeting),{
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then((response) => console.log('FROM SERVER : ', 'recieved : ', response))
+        .catch((error) => console.log(error))
 }
 
 export const getData = async (urlName: string) => {
@@ -22,7 +28,7 @@ export const addData = async (urlName: string, newData: any) => {
             'Content-Type': 'application/json'
         }
     })
-        .then((response) => {console.log('FROM SERVER : ', 'res : ', response) })
+        .then((response) => console.log('FROM SERVER : ', 'created : ', response))
         .catch((error) => console.log(error))
 }
 

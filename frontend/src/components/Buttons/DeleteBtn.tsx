@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { useQueryClient } from 'react-query'
 import * as api from '../../services/api'
+import { useQueryClient } from 'react-query'
 
 import { ActionIcon } from '@mantine/core'
 import { Delete } from '@mui/icons-material'

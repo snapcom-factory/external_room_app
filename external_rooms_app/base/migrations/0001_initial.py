@@ -96,8 +96,8 @@ class Migration(migrations.Migration):
                 (
                     "room_id",
                     models.ForeignKey(
+                        null=True, 
                         blank=True,
-                        null=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name='terminal',
                         to="base.room",

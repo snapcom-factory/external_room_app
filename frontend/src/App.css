@@ -28,8 +28,6 @@
 }
 
 
-
-
 .meeting-page {
     display: flex;
     align-items: center;
@@ -50,15 +48,24 @@
     transition: all 250ms var(--c--theme--transitions--ease-in-out);
 }
 
-/* .form-container>* {
-    margin-top: 1rem;
-} */
 
-.form-container h2 {
-    margin-inline: 1rem;
-    margin-top: .5rem;
-    word-wrap: unset;
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    min-width: 45ch;
+    max-width: min-content;
+    background-color: var(--c--theme--colors--primary-100);
+    border-radius: .5rem;
+    box-shadow: 0px 0px 4px var(--c--theme--colors--primary-400);
 }
+
+.form-btn-container {
+    display: flex;
+    gap: 1rem;
+}
+
 
 .inputs {
     display: flex;
@@ -68,26 +75,6 @@
     transition: all 250ms var(--c--theme--transitions--ease-in-out);
     overflow: scroll;
 }
-
-.form-container ::-webkit-scrollbar {
-    margin-left: 1rem;
-}
-
-#time-picker {
-    height: 3rem;
-    width: 100%;
-    padding: .5rem;
-    border-radius: .5rem;
-    border: 1px solid var(--c--theme--colors--greyscale-200);
-}
-
-/* .database-form {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-} */
-
 
 
 .data-panel {
@@ -118,15 +105,11 @@
 }
 
 
-
-.error {
-    padding: 1rem;
+.error-page {
+    width: 100%;
+    padding: 2rem;
     background-color: #f001;
-    border-radius: .5rem;
-    border: 2px solid #f005;
 }
-
-
 
 
 #primary-btn {
