@@ -1,33 +1,65 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
-<div class="flex-container">
-<div class="all-infos-building">
-  <h2 class="subtitle">{{building.name}}</h2>
-  <div class="characteristics">
-    <h4 class="bloc-title">Caratéristiques du bâtiment</h4>
-    <ul id="building-characteristics">
-      <li>Nom : {{building.name}}</li>
-      <li>Adresse : {{building.address}}</li>
-      <li>Ville : {{building.city}}</li>
-      <li>Code Postal : {{building.postal_code}}</li>
-      <li>Pays : {{building.country}}</li>
-    </ul>
-  </div>
-  <div class="characteristics">
-    <h4 class="bloc-title">Liste des salles du bâtiment</h4>
-    <ul>
-      {% for room in rooms %}
-        <li>Nom de la salle : {{room.name}}</li>
-      {% endfor %}
-    </ul>
-  </div>
-  </div>
-</div>
+<button class="btn rounded-circle" style="position: fixed; left: 1rem; top: 5rem;" onclick="goBack()">
+  <i class="bi bi-arrow-left" style="font-size: 2.5rem;"></i>
+</button>
 
-<div class="flex-container">
-  <button class="delete-button" id="delete-building" value="{{building.id}}">
-    Supprimer le bâtiment
-  </button>
+<div class="card shadow" style="width: 24rem;">
+
+  <div class="card-header pt-3 bg-body-tertiary">
+    <h2 class="card-title m-0">{{building.name}}</h2>
+  </div>
+
+  <ul class="list-group list-group-flush">
+
+    <li class="list-group-item p-0">
+      <div class="accordion accordion-flush" id="accordionFlush">
+
+        <div class="accordion-item">
+          <h4 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+              aria-expanded="true" aria-controls="flush-collapseOne">
+              Caratéristiques de l'emplacement :
+            </button>
+          </h4>
+          <div id="flush-collapseOne" class="accordion-collapse collapse show">
+            <ul class="accordion-body ms-4">
+              <li>Nom : {{building.name}}</li>
+              <li>Adresse : {{building.address}}</li>
+              <li>Ville : {{building.city}}</li>
+              <li>Code Postal : {{building.postal_code}}</li>
+              <li>Pays : {{building.country}}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h4 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+              Salles :
+            </button>
+          </h4>
+          <div id="flush-collapseTwo" class="accordion-collapse collapse">
+            <ul class="accordion-body ms-4">
+              {% for room in rooms %}
+              <li><a href="{% url 'room' room.id %}">{{room.name}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </li>
+
+    <li class="list-group-item p-4">
+      <h4 class="card-subtitle mb-2">Supprimer l'emplacement :</h4>
+      <span class="d-flex flex-column mt-4">
+        <button class="btn btn-outline-danger" onclick="deleteBuilding({{building.id}})">Supprimer</button>
+      </span>
+    </li>
+
+  </ul>
 </div>
 
 <script src="{% static 'script_building.js' %}"></script>

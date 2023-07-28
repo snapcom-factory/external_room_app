@@ -16,6 +16,24 @@ from .api.utils_meeting import handle_meeting_creation
 # Create your views here.
 
 @login_required(login_url='admin/login/?next=')
+def meeting(request):
+
+    if request.method == "POST" and "create-meeting" in request.POST:
+        form_meeting = MeetingForm(request.POST)
+        if form_meeting.is_valid():
+            data = form_meeting.cleaned_data
+            handle_meeting_creation(data)
+
+            return redirect("meeting")
+        
+    form_meeting = MeetingForm()
+    
+    rooms = Room.objects.all()
+    buildings = Building.objects.all()
+    context = {"rooms": rooms, "buildings": buildings, "form_meeting" : form_meeting}
+    return render(request, 'meeting.html', context)
+
+@login_required(login_url='admin/login/?next=')
 def data(request):
 
     def clean_str(str, default):
@@ -145,21 +163,28 @@ def data(request):
             success_upload = handle_uploaded_csv(request.FILES["file"])
             return redirect("data")
     
-    elif request.method == "POST" and "create-meeting" in request.POST:
-        form_meeting = MeetingForm(request.POST)
-        if form_meeting.is_valid():
-            data = form_meeting.cleaned_data
-            handle_meeting_creation(data)
-
-            return redirect("data")
-    
     form_csv= CSVForm()
-    form_meeting = MeetingForm()
 
     rooms = Room.objects.all()
     buildings = Building.objects.all()
-    context = {"rooms": rooms, "buildings": buildings, "form_csv": form_csv, "form_meeting" : form_meeting}
+    context = {"rooms": rooms, "buildings": buildings, "form_csv": form_csv}
     return render(request, 'data.html', context)
+
+@login_required(login_url='admin/login/?next=')
+def rooms(request):
+    form_csv= CSVForm()
+    rooms = Room.objects.all()
+    buildings = Building.objects.all()
+    context = {"rooms": rooms, "buildings": buildings, "form_csv": form_csv}
+    return render(request, 'rooms.html', context)
+
+@login_required(login_url='admin/login/?next=')
+def buildings(request):
+    form_csv= CSVForm()
+    rooms = Room.objects.all()
+    buildings = Building.objects.all()
+    context = {"rooms": rooms, "buildings": buildings, "form_csv": form_csv}
+    return render(request, 'buildings.html', context)
 
 @login_required(login_url='admin/login/?next=')
 def room_infos(request, pk):
@@ -204,12 +229,12 @@ def add_room(request):
         form = RoomForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("data")
+            return redirect("rooms")
 
     else:
         form = RoomForm()
 
-    context = {"form": form, "title": "Add a room"}
+    context = {"form": form, "title": "Ajouter une salle"}
 
     return render(request, "form.html", context)
 
@@ -220,12 +245,12 @@ def add_building(request):
 
         if form.is_valid():
             form.save()
-            return redirect("data")
+            return redirect("buildings")
 
     else:
         form = BuildingForm()
 
-    context = {"form": form, "title": "Add a building"}
+    context = {"form": form, "title": "Ajouter un emplacement"}
 
     return render(request, "form.html", context)
 

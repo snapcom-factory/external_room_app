@@ -1,26 +1,33 @@
-const deleteRoomButton = document.getElementById("delete-room");
-const initRoomButton = document.getElementById("init-room");
+const initButton = document.getElementById("init-button");
 
-deleteRoomButton.addEventListener("click", deleteRoom);
-initRoomButton.addEventListener("click", initRoom);
+initButton.addEventListener("click", initDevices);
 
-
-function deleteRoom() {
-  let room_id = deleteRoomButton.value;
-  fetch(`/api/delete-room/${room_id}`)
+async function deleteRoom(id) {
+  await fetch(`/api/delete-room/${id}`)
     .catch(function (error) {
       console.log(error);
-    }).then( function() {
-      document.location.href="/";
-  });
+    }).then(function () {
+      document.location.href = "/rooms";
+    });
 }
 
-function initRoom() {
-  let room_id = initRoomButton.value;
-  fetch(`/api/init?id=${room_id}`)
+async function initRoom(id) {
+  await fetch(`/api/init?id=${id}`)
     .catch(function (error) {
       console.log(error);
-    }).then( function() {
-      document.location.href="/";
-  });
+    }).then(res => console.log(res));
+}
+
+function initDevices() {
+  if (confirm("Do you really want to initialize Cisco devices ?")) {
+    fetch(`/api/init`)
+      .then(function (response) {
+        if (response.status === 200) {
+          console.log("init devices button")
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 }

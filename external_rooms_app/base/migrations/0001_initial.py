@@ -58,8 +58,7 @@ class Migration(migrations.Migration):
                 (
                     "terminal_type",
                     models.CharField(
-                        blank=True,
-                        choices=[("cisco", "cisco"), ("pulse", "pulse")],
+                        default='cisco',
                         max_length=200,
                         null=True,
                     ),

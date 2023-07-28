@@ -1,12 +1,16 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
-<h2>{{title}}</h2>
-
-<div class="flex-container">
-  <div class="form_div">
+<button class="btn rounded-circle" style="position: fixed; left: 1rem; top: 5rem;" onclick="goBack()">
+  <i class="bi bi-arrow-left" style="font-size: 2.5rem;"></i>
+</button>
+<div class="card shadow-sm" style="width: 24rem;">
+  <h2 class="card-header card-title m-0 bg-body-tertiary">{{title}}</h2>
+  <div class="card-body">
     <form class="form" method="POST" action="">
       {% csrf_token %} {{form.as_p}}
-      <input type="submit" value="Submit" />
+      <span class="d-flex justify-content-end">
+        <button class="btn btn-primary" type="submit">Ajouter à la BDD</button>
+      </span>
     </form>
   </div>
 </div>

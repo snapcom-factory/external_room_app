@@ -1,30 +1,36 @@
-const deleteDataButton = document.getElementById("delete-data");
-const initButton = document.getElementById("init-button");
-
-deleteDataButton.addEventListener("click", deleteData);
-initButton.addEventListener("click", initDevices);
-
-function deleteData() {
-  if (confirm("Do you really want to delete the database ?")) {
-    fetch(`/api/reset-bdd`)
-      .catch(function (error) {
-        console.log(error);
-      }).then( function() {
-        location.reload();
-    });
-  }
+function logoutUser() {
+    console.log("logout");
+    fetch(`/logout`)
+        .then(function () {
+            document.location.href = "/";
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 
-function initDevices() {
-  if (confirm("Do you really want to initialize Cisco devices ?")) {
-    fetch(`/api/init`)
-      .then(function (response) {
-        if (response.status === 200) {
-          console.log("init devices button")
+
+function setTheme(switching) {
+    const app = document.querySelector("html")
+    const icon = document.getElementById("themeSwitcher")
+    let theme = window.localStorage.getItem("theme")
+    console.log(theme)
+    if (theme != "dark" && theme != "light") theme = "light"
+    if (switching) {
+        if (theme == "dark") {
+            theme = "light";
+            icon.classList.replace("bi-lightbulb-fill", "bi-lightbulb-off");
+        } else if (theme == "light") {
+            theme = "dark";
+            icon.classList.replace("bi-lightbulb-off", "bi-lightbulb-fill");
         }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
+    }
+    app.setAttribute("data-bs-theme", theme)
+    window.localStorage.setItem("theme", theme)
+}
+
+window.onload = setTheme(false)
+
+function goBack() {
+    window.history.back()
 }

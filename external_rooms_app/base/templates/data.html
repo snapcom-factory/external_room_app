@@ -1,96 +1,30 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
-<div class="flex-container">
-  <div class="add-data-container">
-    <!-- <h3>Ajouter des salles à la base de données</h3> -->
-    <div class="form_div">
+<button class="btn rounded-circle" style="position: fixed; left: 1rem; top: 5rem;" onclick="goBack()">
+  <i class="bi bi-arrow-left" style="font-size: 2.5rem;"></i>
+</button>
+
+<div class="card shadow" style="width: 24rem;">
+  <h2 class="card-header card-title m-0 bg-body-tertiary">Base de données</h2>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item p-4">
       <form class="form" enctype="multipart/form-data" method="POST" action="">
         {% csrf_token %}
         {{ form_csv.as_p }}
-        <div class="flex-container">
-          <input class="submit-btn" type="submit" name="database-load" value="Charger la BDD">
-        </div>
+        <span class="d-flex justify-content-end">
+          <button class="btn btn-primary" type="submit" name="database-load">Importer le fichier</button>
+        </span>
       </form>
-    </div>
-    <button class="delete-button" id="delete-data">Supprimer la BDD</button>
-  </div>
+    </li>
+    <li class="list-group-item p-4">
+      <h4 class="card-subtitle mb-2">Supprimer toute la BDD :</h4>
+      <span class="d-flex flex-column mt-4">
+        <button class="btn btn-outline-danger flex-grow-1" onclick="deleteData()">Supprimer</button>
+      </span>
+    </li>
+  </ul>
 </div>
 
-<div class="infos-bdd">
-
-  <div class="rooms">
-    <h3 class="category-title">SALLES</h3>
-    <div class="add-room-button">
-      <a href="{% url 'add-room' %}">Ajouter une salle</a>
-    </div>
-    <div class="infos-rooms">
-      {% for room in rooms %}
-      <div class="one-room">
-        <h4 class="room-name">
-          <a href="{% url 'room' room.id %}">{{ room.name }}</a>
-        </h4>
-        <ul class="room-some-infos">
-          <!-- <li>Name : <a href="{% url 'room' room.id %}">{{ room.name }}</a></li> -->
-          <li class="building-name">Bâtiment :
-            {% if room.building_id != None %} <a href="{% url 'building' room.building_id.id %}">{{ room.building_id.name }}</a> 
-            {% else %} Unknown
-            {% endif %}
-          </li>
-          <li>Étage : {{ room.floor }}</li>
-          <li>Capacité : {{ room.capacity }}</li>
-        </ul>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-
-  <!-- <hr /> -->
-
-  <div class="buildings">
-    <h3 class="category-title">BÂTIMENTS</h3>
-    <div class="add-building-button">
-      <a  href="{% url 'add-building' %}">Ajouter un bâtiment</a>
-    </div>
-    <div class="infos-buildings">
-      {% for building in buildings %}
-      <div class="one-building">
-        <h4 class="building-name">
-          <a href="{% url 'building' building.id %}">{{ building.name }}</a>
-        </h4>
-        <ul class="building-some-infos">
-          <li>Adresse : {{ building.address }}</li>
-          <li>Ville : {{ building.city }}</li>
-          <li>Code Postal : {{ building.postal_code }}</li>
-          <li>Id : {{ building.id }}</li>
-        </ul>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</div>
-
-<div class="flex-container">
-  <div class="add-data-container">
-    <div class="form_div">
-      <h2>Créer une réunion</h2>
-      <form class="form" enctype="multipart/form-data" method="POST" action="">
-        {% csrf_token %}
-        {{ form_meeting.as_p }}
-
-        <div class="flex-container">
-          <input class="submit-btn" type="submit" name="create-meeting" value="Créer">
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="flex-container">
-  {% if rooms %}
-    <button id="init-button">INIT CISCO</button>
-  {% endif %}
-</div>
-
-<script src="{% static 'script.js' %}"></script>
+<script src="{% static 'script_data.js' %}"></script>
 
 {% endblock %}

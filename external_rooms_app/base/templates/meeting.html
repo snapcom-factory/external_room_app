@@ -1,0 +1,16 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<div class="card shadow" style="width: 24rem;">
+    <h2 class="card-header card-title m-0 bg-body-tertiary">Créer une réunion</h2>
+    <div class="card-body p-4">
+        <form class="form" enctype="multipart/form-data" method="POST" action="">
+            {% csrf_token %}
+            {{ form_meeting.as_p }}
+            <span class="d-flex justify-content-end">
+                <button class="btn btn-primary" type="submit" name="create-meeting">Créer la réunion</button>
+            </span>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
