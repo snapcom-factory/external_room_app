@@ -1,11 +1,12 @@
 import Keycloak, { KeycloakConfig, KeycloakInitOptions } from "keycloak-js";
 import { createContext, useEffect, useState } from "react";
+import { getKeycloakURL } from "./api";
 
 
 /**
  * KeycloakConfig configures the connection to the Keycloak server.
 */
-const keycloackUrl = import.meta.env.VITE_KEYCLOAK_URL;
+const keycloackUrl = await getKeycloakURL();
 
 const keycloakConfig: KeycloakConfig = {
   realm: 'magnify',

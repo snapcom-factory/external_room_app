@@ -34,5 +34,7 @@ urlpatterns = [
     path("get-all-meetings/", views.get_all_meetings, name="get-all-meetings"),
     # fake meeting
     path("fake-meeting/", views.create_fake_meeting, name="fake-meeting"),
+    # get Keycloak URL to Front
+    path("get-keycloak-url", views.get_keycloak_url, name="get-keycloak-url")
 ]
    

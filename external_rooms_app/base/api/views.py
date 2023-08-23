@@ -24,6 +24,11 @@ from .utils_meeting import only_3_next_meetings, handle_meeting_creation
 # Create your views here.
 
 @api_view(['GET'])
+def get_keycloak_url(request):
+    keycloak_url = os.getenv("KEYCLOAK_URL")
+    return Response(keycloak_url)
+
+@api_view(['GET'])
 def ping():
     return Response("ping OK")
 

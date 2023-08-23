@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {DJANGO_APP} from '../constants/index'
+import {DJANGO_APP, GET_KEYCLOAK} from '../constants/index'
 
 const mainApi = axios.create({
     baseURL: DJANGO_APP
@@ -38,6 +38,12 @@ export const deleteData = async (urlName: string) => {
     await mainApi.delete(urlName)
         .then((response) => console.log('FROM SERVER : ', 'res : ', response))
         .catch((error) => console.log(error))
+}
+
+export const getKeycloakURL = async () => {
+    const res = await mainApi.get(GET_KEYCLOAK)
+    console.log(res)
+    return res.data
 }
 
 // export const initDevice = async (urlName: string) => {
