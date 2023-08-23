@@ -20,10 +20,8 @@ import App from './App'
 import './index.css'
 
 //* Mantine
-
 import 'dayjs/locale/fr';
 import { DatesProvider } from '@mantine/dates'
-
 
 const queryClient = new QueryClient()
 

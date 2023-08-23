@@ -1,4 +1,13 @@
-const DJANGO_APP = 'localhost:8000'
+const obtpIp = import.meta.env.VITE_OBTP_IP;
+const obtpPort = import.meta.env.VITE_OBTP_PORT;
+
+// console.log("meta-env : ", import.meta.env.VITE_OBTP_PORT)
+
+// const obtpIp = "localhost";
+// const obtpPort = "8000";
+
+export const DJANGO_APP = `${obtpIp}:${obtpPort}`
+console.log("from index : ",DJANGO_APP)
 
 export const NEW_MEETING = `http://${DJANGO_APP}/api/new-meeting/`
 

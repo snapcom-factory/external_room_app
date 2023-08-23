@@ -1,7 +1,8 @@
 import axios from 'axios'
+import {DJANGO_APP} from '../constants/index'
 
 const mainApi = axios.create({
-    baseURL: 'http://localhost:8000/'
+    baseURL: DJANGO_APP
 })
 
 export const createMeeting = async (urlName: string, newMeeting: any) => {  

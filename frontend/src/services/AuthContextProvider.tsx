@@ -1,13 +1,16 @@
 import Keycloak, { KeycloakConfig, KeycloakInitOptions } from "keycloak-js";
 import { createContext, useEffect, useState } from "react";
 
+
 /**
  * KeycloakConfig configures the connection to the Keycloak server.
- */
+*/
+const keycloackUrl = import.meta.env.VITE_KEYCLOAK_URL;
+
 const keycloakConfig: KeycloakConfig = {
-  realm: 'DevtestReact',
-  clientId: 'obtp-front-devserver',
-  url: 'http://localhost:8080/',
+  realm: 'magnify',
+  clientId: 'magnify-front',
+  url: keycloackUrl,
 };
 
 /**
@@ -43,6 +46,8 @@ interface AuthContextValues {
   hasRole: (role: string) => boolean;
 
   isAdmin: boolean;
+
+  error?: string | null;
 }
 
 /**
@@ -89,8 +94,9 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
   // Local state that will contain the users name once it is loaded
   const [username, setUsername] = useState<string>("");
 
-  //
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
+
+  const [error, setError] = useState<string>("")
 
   // Effect used to initialize the Keycloak client. It has no dependencies so it is only rendered when the app is (re-)loaded.
   useEffect(() => {
@@ -106,16 +112,18 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
 
         // If the authentication was not successfull the user is send back to the Keycloak login form
         if (!isAuthenticatedResponse) {
-          console.log(
-            "user is not yet authenticated. forwarding user to login."
-          );
+          const notAuthenticatedMessage = "user is not yet authenticated. forwarding user to login."
+          console.log(notAuthenticatedMessage);
+          setError(notAuthenticatedMessage);
           keycloak.login();
         }
         // If we get here the user is authenticated and we can update the state accordingly
         console.log("user already authenticated");
         setAuthenticated(isAuthenticatedResponse);
       } catch {
-        console.log("error initializing Keycloak");
+        const initErrorMessage = "error initializing Keycloak"
+        console.log(initErrorMessage);
+        setError(initErrorMessage)
         setAuthenticated(false);
       }
     }
@@ -137,7 +145,9 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
           setUsername(profile.username);
         }
       } catch {
-        console.log("error trying to load the users profile");
+        const userProfileLoadingErrorMessage = "error trying to load the users profile"
+        console.log(userProfileLoadingErrorMessage);
+        setError(userProfileLoadingErrorMessage);
       }
     }
 
@@ -169,7 +179,7 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
   // Setup the context provider
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, username, logout, hasRole, isAdmin }}
+      value={{ isAuthenticated, username, logout, hasRole, isAdmin, error }}
     >
       {props.children}
     </AuthContext.Provider>

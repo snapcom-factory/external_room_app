@@ -24,13 +24,16 @@
     "@mui/material": "^5.13.6",
     "@openfun/cunningham-react": "^0.8.2",
     "@openfun/cunningham-tokens": "^0.4.0",
+    "@types/dotenv": "^8.2.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
+    "dotenv": "^16.3.1",
     "keycloak-js": "^22.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
-    "react-router-dom": "^6.14.0"
+    "react-router-dom": "^6.14.0",
+    "require": "^2.4.20"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
