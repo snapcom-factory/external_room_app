@@ -3,15 +3,9 @@ import { createContext, useEffect, useState } from "react";
 import { getKeycloakURL } from "./api";
 
 
-/**
- * KeycloakConfig configures the connection to the Keycloak server.
-*/
-const keycloackUrl = await getKeycloakURL();
-
 const keycloakConfig: KeycloakConfig = {
   realm: 'magnify',
   clientId: 'magnify-front',
-  url: keycloackUrl,
 };
 
 /**
@@ -23,7 +17,7 @@ const keycloakInitOptions: KeycloakInitOptions = {
 };
 
 // Create the Keycloak client instance
-const keycloak = new Keycloak(keycloakConfig);
+// const keycloak = new Keycloak(keycloakConfig);
 
 /**
  * AuthContextValues defines the structure for the default values of the {@link AuthContext}.
@@ -99,7 +93,15 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
 
   const [error, setError] = useState<string>("")
 
-  // Effect used to initialize the Keycloak client. It has no dependencies so it is only rendered when the app is (re-)loaded.
+  const [keycloak, setKeycloak] = useState<Keycloak>();
+
+  useEffect(() => {
+    getKeycloakURL().then((url) => {
+      setKeycloak(new Keycloak({ ...keycloakConfig, url }))
+    })
+  }, []);
+
+  // Effect used to initialize the Keycloak client. It has no dependend to base url availability.
   useEffect(() => {
     /**
      * Initialize the Keycloak instance
@@ -107,7 +109,7 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
     async function initializeKeycloak() {
       console.log("initialize Keycloak");
       try {
-        const isAuthenticatedResponse = await keycloak.init(
+        const isAuthenticatedResponse = await keycloak?.init(
           keycloakInitOptions
         );
 
@@ -116,11 +118,11 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
           const notAuthenticatedMessage = "user is not yet authenticated. forwarding user to login."
           console.log(notAuthenticatedMessage);
           setError(notAuthenticatedMessage);
-          keycloak.login();
+          keycloak?.login();
         }
         // If we get here the user is authenticated and we can update the state accordingly
         console.log("user already authenticated");
-        setAuthenticated(isAuthenticatedResponse);
+        setAuthenticated(isAuthenticatedResponse || false);
       } catch {
         const initErrorMessage = "error initializing Keycloak"
         console.log(initErrorMessage);
@@ -130,7 +132,8 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
     }
 
     initializeKeycloak();
-  }, []);
+
+  }, [keycloak]);
 
   // This effect loads the users profile in order to extract the username
   useEffect(() => {
@@ -139,10 +142,10 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
      */
     async function loadProfile() {
       try {
-        const profile = await keycloak.loadUserProfile();
-        if (profile.firstName) {
+        const profile = await keycloak?.loadUserProfile();
+        if (profile?.firstName) {
           setUsername(profile.firstName);
-        } else if (profile.username) {
+        } else if (profile?.username) {
           setUsername(profile.username);
         }
       } catch {
@@ -157,15 +160,15 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
       loadProfile();
 
       //
-      setIsAdmin(keycloak.hasRealmRole("admin") ? true : false)
+      setIsAdmin(keycloak?.hasRealmRole("admin") ? true : false)
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, keycloak]);
 
   /**
    * Initiate the logout
    */
   const logout = () => {
-    keycloak.logout();
+    keycloak?.logout();
   };
 
   /**
@@ -174,7 +177,7 @@ const AuthContextProvider = (props: AuthContextProviderProps) => {
    * @returns whether or not if the user has the role
    */
   const hasRole = (role: string) => {
-    return keycloak.hasRealmRole(role);
+    return keycloak?.hasRealmRole(role) || false;
   };
 
   // Setup the context provider
