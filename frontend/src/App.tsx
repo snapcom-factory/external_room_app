@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext } from 'react'
 
 //*Authentification
 import { AuthContext } from "./services/AuthContextProvider";
@@ -23,11 +23,11 @@ import { Button } from '@mantine/core';
 
 
 function App() {
-  const auth = React.useContext(AuthContext);
+  const { isAuthenticated, isAdmin, error } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const managePanel =
-    auth.isAdmin ?
+    isAdmin ?
       <div className='main-panel'>
         {/* <DatabaseForm /> */}
         <Outlet />
@@ -38,24 +38,24 @@ function App() {
   return (
     <>
       <Header />
-      {!auth.isAuthenticated ?
+      {!isAuthenticated ?
         <div
           style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', zIndex: '9999=d' }}>
-          {!auth.error ?
+          {!error ?
             <>
               <CircularProgress size={'12rem'} thickness={2.5} />
               <h4>Reaching for keycloak server ...</h4>
-            </> : auth.error}
+            </> : error}
         </div> :
         <>
-          {auth.isAdmin && <Navbar />}
+          {isAdmin && <Navbar />}
           <Routes>
             <Route path='/' element={
-              <div className={auth.isAdmin ? 'main-panel' : 'main-panel no-nav'} >
+              <div className={isAdmin ? 'main-panel' : 'main-panel no-nav'} >
                 <MeetingPage />
               </div>
             } />
-            <Route path='manage' element={auth.isAdmin ? managePanel :
+            <Route path='manage' element={isAdmin ? managePanel :
               <div className='main-panel no-nav'>
                 <h2>On dirait que vous n'êtes pas au bon endroit ...</h2>
                 <br />

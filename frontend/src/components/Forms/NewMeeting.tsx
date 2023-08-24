@@ -98,6 +98,7 @@ export default function NewMeeting() {
             />
             <DateTimePicker
                 {...form.getInputProps('start_date')}
+                dropdownType="modal"
                 required
                 label="Date et heure"
                 placeholder="Date et heure de la réunion"
@@ -107,8 +108,12 @@ export default function NewMeeting() {
                 clearable
                 renderDay={(date) => {
                     const day = date.getDate();
+                    const month = date.getMonth();
+                    const year = date.getFullYear();
+                    console.log("day = ", day);
+                    console.log("today", today)
                     return (
-                        <Indicator size={6} color="red" offset={-4} disabled={day !== today.getDate()}>
+                        <Indicator size={6} color="red" offset={-4} disabled={day !== today.getDate() || month !== today.getMonth() || year !== today.getFullYear()}>
                             <div>{day}</div>
                         </Indicator>
                     );

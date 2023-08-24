@@ -74,7 +74,7 @@ export default function DataPanel(props: any | unknown | string) {
     // debugTable: true,
   })
 
-  React.useEffect(() => table.setPageSize(8), [table])
+  React.useEffect(() => { table.setPageSize(15) }, [table])
 
   return (
     <>
@@ -108,14 +108,11 @@ export default function DataPanel(props: any | unknown | string) {
 
 
         {/* Tableau */}
-        {db[props.dataType].isFetching && "Chargement de la base de données ..."}
+        {db[props.dataType].isLoading && "Chargement de la base de données ..."}
         {db[props.dataType].isError && "Erreur rencontrée en essayant d'atteindre la base de données"}
         {db[props.dataType].isSuccess ? (data.length ?
           <BasicTable table={table} columns={props.columns} ></BasicTable>
           : `Pas ${props.emptyDataMessage} dans la base de données`) : null}
-        {
-        }
-
       </div >
 
 
@@ -146,20 +143,3 @@ export default function DataPanel(props: any | unknown | string) {
   )
 
 }
-
-
-
-
-
-// return (
-//   <tr>
-//     <td data-cell="name">
-//       <a href="{% url 'room' room.id %}">{room.name}</a>
-//     </td>
-//     <td data-cell="building">
-//       <a href="{% url 'building' room.building_id.id %}">{room.building_id}</a>
-//     </td>
-//     <td data-cell="floor">{room.floor}</td>
-//     <td data-cell="capacity">{room.capacity}</td>
-//   </tr>
-// )

@@ -1,53 +1,54 @@
-import * as React from 'react';
+import { useState, useMemo } from 'react';
 
 import { flexRender } from '@tanstack/react-table'
 
 import { ButtonGroup, IconButton } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp, FirstPageRounded, LastPageRounded, NavigateBeforeRounded, NavigateNextRounded } from '@mui/icons-material';
 import './Basic-Table.css'
+import { NumberInput } from '@mantine/core';
 
 
 export default function BasicTable({ ...props }) {
 
-    // const data = React.useMemo(() => props.db, [props.db])
+    const table = useMemo(() => props.table, [props.table])
+    const [pageValue, setPageValue] = useState<number | undefined>(undefined);
 
-    // const [sorting, setSorting] = React.useState<SortingState>([])
-    // const [globalFilter, setGlobalFilter] = React.useState('')
+    function handleFirstPage(): void {
+        table.setPageIndex(0);
+        setPageValue(1);
+    }
 
-    // const table = useReactTable({
-    //     data,
-    //     columns: props.columns,
-    //     state: {
-    //         sorting: sorting,
-    //         globalFilter: globalFilter,
-    //     },
-    //     enableRowSelection: true,
-    //     getCoreRowModel: getCoreRowModel(),
-    //     getPaginationRowModel: getPaginationRowModel(),
-    //     onSortingChange: setSorting,
-    //     getSortedRowModel: getSortedRowModel(),
-    //     getFilteredRowModel: getFilteredRowModel(),
-    //     onGlobalFilterChange: setGlobalFilter,
+    function handlePrevPage(): void {
+        table.previousPage();
+        setPageValue(pageValue && pageValue - 1);
+    }
 
-    //     // debugTable: true,
-    // })
+    function handleNextPage(): void {
+        table.nextPage();
+        setPageValue(pageValue && pageValue + 1);
+    }
 
-    const table = React.useMemo(() => props.table, [props.table])
+    function handleLastPage(): void {
+        table.setPageIndex(table.getPageCount() - 1);
+        setPageValue(table.getPageCount());
+    }
 
     return (
-        <>
-
+        <div>
             <table className='basic-table'>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup: any) =>
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header: any) =>
                                 <th key={header.id} colSpan={header.colSpan}>
-                                    {header.isPlaceholder ? null :
+                                    {header.column.columnDef.isPlaceholder ?
+                                        <div className='header-cell'>
+                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                        </div> :
                                         <div style={{ display: 'flex', gap: '.5rem' }}{...{
                                             className: header.column.getCanSort()
                                                 ? 'cursor-pointer noselect'
-                                                : ' ',
+                                                : '',
                                             onClick: header.column.getToggleSortingHandler(),
                                         }}>
                                             {flexRender(header.column.columnDef.header, header.getContext())}
@@ -77,23 +78,35 @@ export default function BasicTable({ ...props }) {
                         </tr>
                     )}
                 </tbody>
-                {(table.getPageCount() > 1 ?
-                    <>
-                        <p style={{ paddingRight: '1rem', fontSize: '14px' }}>
-                            {`Page ${table.getState().pagination.pageIndex + 1} of ${table.getPageCount()}`}
-                        </p>
-                        <ButtonGroup size='small'>
-
-                            <IconButton size='small' onClick={() => table.setPageIndex(0)}><FirstPageRounded fontSize='small' /></IconButton>
-                            <IconButton size='small' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}><NavigateBeforeRounded fontSize='small' /></IconButton>
-                            {/* <input type="number" /> */}
-                            <IconButton size='small' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}><NavigateNextRounded fontSize='small' /></IconButton>
-                            <IconButton size='small' onClick={() => table.setPageIndex(table.getPageCount() - 1)}><LastPageRounded fontSize='small' /></IconButton>
-                        </ButtonGroup>
-                    </>
-                    : null)
-                }
             </table >
-        </>
+            {(table.getPageCount() > 1 ?
+                <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'end', marginTop: '1rem' }}>
+                    <p style={{ paddingRight: '1rem', fontSize: '14px' }}>
+                        {`Page ${table.getState().pagination.pageIndex + 1} of ${table.getPageCount()}`}
+                    </p>
+                    <ButtonGroup size='small'>
+                        <IconButton size='small' onClick={handleFirstPage} disabled={!table.getCanPreviousPage()}><FirstPageRounded fontSize='small' /></IconButton>
+                        <IconButton size='small' onClick={handlePrevPage} disabled={!table.getCanPreviousPage()}><NavigateBeforeRounded fontSize='small' /></IconButton>
+                        <NumberInput
+                            type="number"
+                            styles={{ input: { width: "15ch" } }}
+                            placeholder='Aller à'
+                            defaultValue={undefined}
+                            value={pageValue}
+                            onChange={(value: number) => {
+                                setPageValue(value);
+                                table.setPageIndex(value - 1)
+                            }}
+                            min={1}
+                            max={table.getPageCount()}
+                            hideControls
+                        />
+                        <IconButton size='small' onClick={handleNextPage} disabled={!table.getCanNextPage()}><NavigateNextRounded fontSize='small' /></IconButton>
+                        <IconButton size='small' onClick={handleLastPage} disabled={!table.getCanNextPage()} > <LastPageRounded fontSize='small' /></IconButton>
+                    </ButtonGroup>
+                </div>
+                : null)
+            }
+        </div >
     )
 }

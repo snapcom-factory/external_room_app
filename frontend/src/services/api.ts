@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {DJANGO_APP, GET_KEYCLOAK} from '../constants/index'
+import {DJANGO_APP, GET_KEYCLOAK, INIT_DEVICES} from '../constants/index'
 
 const mainApi = axios.create({
     baseURL: DJANGO_APP
@@ -17,13 +17,14 @@ export const createMeeting = async (urlName: string, newMeeting: any) => {
 
 export const getData = async (urlName: string) => {
     const res = await mainApi.get(urlName)
+    // console.log(res)
     return res.data
 }
 
 export const addData = async (urlName: string, newData: any) => {
-    console.log('FROM API : ', 'url : ', urlName)
-    console.log('FROM API : ', 'newData : ', newData)
-    console.log('FROM API : ', 'stringified : ', JSON.stringify(newData))
+    // console.log('FROM API : ', 'url : ', urlName)
+    // console.log('FROM API : ', 'newData : ', newData)
+    // console.log('FROM API : ', 'stringified : ', JSON.stringify(newData))
     await mainApi.post(urlName, JSON.stringify(newData), {
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ export const addData = async (urlName: string, newData: any) => {
 }
 
 export const deleteData = async (urlName: string) => {
-    console.log('FROM API : ', 'url : ', urlName)
+    // console.log('FROM API : ', 'url : ', urlName)
     await mainApi.delete(urlName)
         .then((response) => console.log('FROM SERVER : ', 'res : ', response))
         .catch((error) => console.log(error))
@@ -42,16 +43,14 @@ export const deleteData = async (urlName: string) => {
 
 export const getKeycloakURL = async () => {
     const res = await mainApi.get(GET_KEYCLOAK)
-    console.log(res)
+    // console.log(res)
     return res.data
 }
 
-// export const initDevice = async (urlName: string) => {
-//     console.log('FROM API : ', 'url : ', urlName)
-//     await mainApi.get(urlName)
-//         .then((response) => console.log('FROM SERVER : ', 'res : ', response))
-//         .catch((error) => console.log(error))
-// }
-
+export const initDevices = async () => {
+    await mainApi.get(INIT_DEVICES)
+        .then((response) => console.log('FROM SERVER : ', 'res : ', response))
+        .catch((error) => console.log(error))
+}
 
 export default mainApi

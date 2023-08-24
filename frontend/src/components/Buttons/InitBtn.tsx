@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useQueryClient } from 'react-query'
 import * as api from '../../services/api'
 
 import { Button } from '@mantine/core'
-// import { Delete } from '@mui/icons-material'
 
-export default function DeleteBtn(props: any) {
+
+export default function InitBtn() {
 
     const queryClient = useQueryClient()
 
@@ -14,17 +14,26 @@ export default function DeleteBtn(props: any) {
 
     const handleInit = async () => {
         setIsInitializing(true)
-        console.log(`deleting ${props.qK.slice(0, -1)} : `, props.deleteId)
-        await api.deleteData(props.url)
+        console.log("Initializing terminals")
+        await api.initDevices()
             .then(() => setTimeout(() => {
                 queryClient.invalidateQueries()
                 setIsInitializing(false);
             }, 200))
     }
 
+    useEffect(() => { console.log("initbtn renderin"); }, [])
+
     return (
-        <Button aria-label="Initialize" size='' variant='outline' onClick={handleInit} loading={isInitializing} >
-            <h6 >Init</h6>
+        <Button
+            aria-label="Initialize"
+            size=''
+            variant='outline'
+            onClick={handleInit}
+            loading={isInitializing}
+            style={{ padding: '.5rem' }}
+        >
+            <h5>Initialiser</h5>
         </Button>
     )
 }

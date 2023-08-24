@@ -1,5 +1,6 @@
-import DeleteBtn from '../Buttons/DeleteBtn'
 import * as URL from '../../constants'
+import DeleteBtn from '../Buttons/DeleteBtn'
+import InitBtn from '../Buttons/InitBtn';
 
 type DataProps = {
     dataType: string;
@@ -9,13 +10,15 @@ type DataProps = {
     columns: Array<object>;
 }
 
-const actionCol = (queryKey: string, url: string) => {
+const actionCol = (queryKey: string, url: string, isTermial?: unknown | boolean) => {
     return {
-        header: null,
+        header: () => isTermial && <InitBtn />,
         accessorKey: "id",
         cell: (cell: any) => <DeleteBtn key={cell.row.id} qK={queryKey} url={url + `${cell.getValue()}`} />,
         enableSorting: false,
         enableColumnFilter: false,
+        isPlaceholder: true,
+        placeholderId: "actionCol"
     }
 }
 
@@ -109,7 +112,7 @@ export const peripheral: DataProps = {
             id: 'state',
             accessorFn: (row: any) => row.is_init ? 'Initialisé' : 'En attente',
         },
-        actionCol('preipherals', URL.DEL_PERIPHERAL),
+        actionCol('preipherals', URL.DEL_PERIPHERAL, true),
 
     ]
 }

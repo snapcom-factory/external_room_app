@@ -22,6 +22,8 @@ export default function Filter({ column, table }: {
 
     // const choix = ['Direction de la direction', 'Direction de la DTY']
 
+    console.log(`column : ${column.id}, first value : ${firstValue} : ${typeof firstValue}`);
+
     return (
         typeof firstValue === 'number' ?
             <div style={{ display: 'flex', gap: '.5rem', alignItems: 'end' }}>
