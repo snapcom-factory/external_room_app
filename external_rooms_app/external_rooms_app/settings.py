@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
-import mimetypes
 
 from pathlib import Path
 
@@ -147,6 +146,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = ["https://" + host for host in AUTHORIZED_HOSTS.split(",")]
-
-mimetypes.add_type("text/css", ".css", True)
-mimetypes.add_type("text/javascript", ".js", True)

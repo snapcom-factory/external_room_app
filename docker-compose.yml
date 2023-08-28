@@ -9,7 +9,7 @@ services:
       - ${POSTGRES_PORT}:5432
 
   external_rooms_app:
-    image: obtp-image:1.2
+    image: obtp-image:1.3
     env_file:
       - .env
     ports:
@@ -17,3 +17,12 @@ services:
     stdin_open: true
     depends_on:
       - db_obtp_plugin
+
+  front_obtp_react:
+    image: obtp-front-image:1.0
+    ports:
+      - 3173:3173
+      - 4173:4173
+    stdin_open: true
+    depends_on:
+      - external_rooms_app

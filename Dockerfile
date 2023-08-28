@@ -1,7 +1,5 @@
 FROM python:3.10-buster as base
 
-FROM base as backend
-
 RUN apt-get update
 RUN apt-get install nano
 
