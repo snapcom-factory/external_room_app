@@ -48,6 +48,30 @@ class Migration(migrations.Migration):
                 ("direction", models.CharField(max_length=200)),
                 ("capacity", models.IntegerField(blank=True, null=True)),
                 ("has_windows", models.BooleanField(default=True)),
+                (
+                    "building_id",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='rooms',
+                        to="base.building",
+                    ),
+                ),
+            ],
+        ),
+        migrations.CreateModel(
+            name="Terminal",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
                 ("ip_terminal", models.CharField(max_length=200, unique=True)),
                 (
                     "serial_number",
@@ -70,12 +94,13 @@ class Migration(migrations.Migration):
                     models.CharField(blank=True, max_length=300, null=True),
                 ),
                 (
-                    "building_id",
+                    "room_id",
                     models.ForeignKey(
+                        null=True, 
                         blank=True,
-                        null=True,
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="base.building",
+                        related_name='terminal',
+                        to="base.room",
                     ),
                 ),
             ],

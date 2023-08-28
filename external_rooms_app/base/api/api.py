@@ -1,18 +1,21 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
+from base.models import Room, Building, Terminal
 
-from base.models import Room, Building
 
-class RoomSerializer(ModelSerializer):
+class TerminalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Terminal
+        fields = "__all__"
+
+class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = "__all__"
 
-class BuildingSerializer(ModelSerializer):
+class BuildingSerializer(serializers.ModelSerializer):
+    # rooms = RoomSerializer(instance="rooms", many=True, read_only=True)
+
     class Meta:
         model = Building
+        # fields = ["name", "address", "city", "postal_code", "country", "rooms"]
         fields = "__all__"
-
-class InitSerializer(ModelSerializer):
-    class Meta:
-        model = Room
-        fields = ["id","name","ip_terminal","terminal_type","is_init"]

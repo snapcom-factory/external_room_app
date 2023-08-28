@@ -1,0 +1,76 @@
+@import "@openfun/cunningham-react/fonts";
+@import "@openfun/cunningham-react/icons";
+@import "@openfun/cunningham-react/style";
+@import "./cunningham-tokens.css";
+@import "./styles/fonts.css";
+
+
+:root {
+  font-family: var(--c--theme--font--families--base);
+  line-height: 1.5;
+  font-size: 16px;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --navBar-width: 13rem;
+
+  --navBar-left-offset: 0px;
+  --header-height: 10vh;
+}
+
+@media screen and (max-width: 1200px) {
+  :root {
+    --navBar-left-offset: -10rem;
+  }
+
+  .navbar h4 {
+    display: none;
+  }
+}
+
+::before,
+::after,
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.noselect {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+.wrapper {
+  background-color: var(--c--theme--colors--primary-100);
+  box-shadow: 0px 0px 4px var(--c--theme--colors--primary-400);
+
+
+  padding: 1rem;
+
+  border-radius: .5rem;
+  transition: all 250ms var(--c--theme--transitions--ease-in-out);
+}
+
+
+@media (prefers-reduced-motion: no-preference) {}

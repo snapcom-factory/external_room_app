@@ -11,21 +11,39 @@ from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from base.models import Room, Building
-from base.api.api import RoomSerializer, BuildingSerializer, InitSerializer
+from base.models import Room, Building, Terminal
+from base.api.api import RoomSerializer, BuildingSerializer, TerminalSerializer
 # pylint: disable=import-error
 from base.api.fake_data import FAKE_DATA
 from cisco.cisco import cisco_init
 from keycloak import create_user, get_OIDC, get_meetings
 
 from . import script_meetings
-from .utils_meeting import only_3_next_meetings
+from .utils_meeting import only_3_next_meetings, handle_meeting_creation
 
 # Create your views here.
 
 @api_view(['GET'])
-def ping(request):
+def get_keycloak_url(request):
+    keycloak_url = os.getenv("KEYCLOAK_URL")
+    return Response(keycloak_url)
+
+@api_view(['GET'])
+def ping():
     return Response("ping OK")
+
+
+@api_view(['POST'])
+def create_meeting(request):
+    data=request.data
+    handle_meeting_creation(data)
+    return Response(data)
+
+#         form_meeting = MeetingForm(request.POST)
+#         if form_meeting.is_valid():
+#             data = form_meeting.cleaned_data
+#             handle_meeting_creation(data)
+
 
 @api_view(['GET'])
 def get_all_rooms(request):
@@ -44,6 +62,50 @@ def get_all_buildings(request):
     return Response(serialized_buildings.data)
 
 @api_view(['GET'])
+def get_all_terminals(request):
+
+    terminals = Terminal.objects.all()
+
+    serialized_terminals = TerminalSerializer(terminals, many=True)
+    return Response(serialized_terminals.data)
+
+@api_view(['POST'])
+def add_room(request):
+    serializer = RoomSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+    
+@api_view(['POST'])
+def add_building(request):
+    serializer = BuildingSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def add_terminal(request):
+    serializer = TerminalSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def delete_room(request, pk):
+    Room.objects.get(id=pk).delete()
+    return HttpResponse("room deleted")
+
+@api_view(['DELETE'])
+def delete_building(request, pk):
+    Building.objects.get(id=pk).delete()
+    return HttpResponse("building deleted")
+
+@api_view(['DELETE'])
+def delete_terminal(request, pk):
+    Terminal.objects.get(id=pk).delete()
+    return HttpResponse("terminal deleted")
+
+@api_view(['GET'])
 def modify_bdd(request):
 
     for building in FAKE_DATA["buildings"]:
@@ -53,14 +115,6 @@ def modify_bdd(request):
 
     for room in FAKE_DATA["rooms"]:
         new_room = Room()
-
-        if room["is_init"]:
-            new_room.serial_number = room["serial_number"]
-            new_room.password_keycloak = room["password_keycloak"]
-            new_room.terminal_type = room["terminal_type"]
-
-        new_room.is_init = room["is_init"]
-        new_room.ip_terminal = room["ip_terminal"]
         new_room.name = room["name"]
         new_room.number = room["number"]
         new_room.building_id = Building.objects.get(name=room["building_name"])
@@ -70,6 +124,19 @@ def modify_bdd(request):
         new_room.direction = room["direction"]
 
         new_room.save()
+    
+    for terminal in FAKE_DATA["terminals"]:
+        new_terminal = Terminal()
+        new_terminal.ip_terminal = terminal["ip_terminal"]
+        new_terminal.room_id = Room.objects.get(name=terminal["room_name"])
+        new_terminal.terminal_type = terminal["terminal_type"]
+        
+        if terminal["is_init"]:
+            new_terminal.is_init = terminal["is_init"]
+            new_terminal.serial_number = terminal["serial_number"]
+            new_terminal.password_keycloak = terminal["password_keycloak"]
+
+        new_terminal.save()
 
     return HttpResponse("<h1>Normalement c'est updated </h1>")
 
@@ -119,37 +186,26 @@ def is_empty(request):
     return Response({"is-empty": empty})
 
 @api_view(['GET'])
-def delete_room(request, pk):
-
-    Room.objects.get(id=pk).delete()
-    return HttpResponse("Normalement c'est delete")
-
-@api_view(['GET'])
-def delete_building(request, pk):
-
-    Building.objects.get(id=pk).delete()
-    return HttpResponse("Normalement c'est delete aussi")
-
-@api_view(['GET'])
 def reset_bdd(request):
     Room.objects.all().delete()
     Building.objects.all().delete()
+    Terminal.objects.all().delete()
 
     return HttpResponse("Tout il est delete")
 
 @api_view(['GET'])
 def init_devices(request):
-    room_id = request.GET.get("id","")
-    if room_id == "": # default to all rooms
-        objects = Room.objects.filter(is_init=False)
-        devices_to_init = InitSerializer(objects, many=True).data
+    terminal_id = request.GET.get("id","")
+    if terminal_id == "": # default to all terminals
+        objects = Terminal.objects.filter(is_init=False)
+        devices_to_init = TerminalSerializer(objects, many=True).data
         for device in devices_to_init:
             if device["terminal_type"] == "cisco":
                 cisco_init(device['ip_terminal'])
         return Response(devices_to_init)
     else:
-        room = Room.objects.get(id=room_id)
-        device = InitSerializer(room).data
+        terminal = Terminal.objects.get(id=terminal_id)
+        device = TerminalSerializer(terminal).data
         if (device["terminal_type"] == "cisco") and not device["is_init"]:
             cisco_init(device['ip_terminal'])
         return Response(device)
@@ -163,23 +219,23 @@ def receive_serial_number(request):
     ip_terminal = get_client_ip(request)
     if serial_number:
         try:
-            room = Room.objects.get(serial_number=serial_number)
+            terminal = Terminal.objects.get(serial_number=serial_number)
         except:
             # set terminal_type
-            Room.objects.filter(ip_terminal=ip_terminal).update(terminal_type=terminal_type)
+            Terminal.objects.filter(ip_terminal=ip_terminal).update(terminal_type=terminal_type)
             # set serial_number
-            Room.objects.filter(ip_terminal=ip_terminal).update(serial_number=serial_number)
+            Terminal.objects.filter(ip_terminal=ip_terminal).update(serial_number=serial_number)
             # set password_keycloak
-            Room.objects.filter(ip_terminal=ip_terminal).update(password_keycloak=str(uuid4()).replace("-",""))
+            Terminal.objects.filter(ip_terminal=ip_terminal).update(password_keycloak=str(uuid4()).replace("-",""))
             # set is_init
-            Room.objects.filter(ip_terminal=ip_terminal).update(is_init=True)
+            Terminal.objects.filter(ip_terminal=ip_terminal).update(is_init=True)
             # create keycloak user
-            room = Room.objects.get(serial_number=serial_number)
-            username = f"{room.terminal_type}-{room.serial_number}"
+            terminal = Terminal.objects.get(serial_number=serial_number)
+            username = f"{terminal.terminal_type}-{terminal.serial_number}"
             email = f'{serial_number}@{terminal_type}.com'
-            create_user(room.serial_number, room.terminal_type, username, email, room.password_keycloak)
+            create_user(terminal.serial_number, terminal.terminal_type, username, email, terminal.password_keycloak)
         else:
-            raise Exception(f"Room with serial number {serial_number} is already init")
+            raise Exception(f"Terminal with serial number {serial_number} is already init")
     else:
         raise Exception("Serial number parameter is empty")
     return HttpResponse(f"Received serial_number {serial_number}")
@@ -195,10 +251,10 @@ def get_client_ip(request):
 @api_view(['GET'])
 def get_my_meetings(request):
     ip_terminal = get_client_ip(request)
-    room = Room.objects.get(ip_terminal=ip_terminal)
+    terminal = Terminal.objects.get(ip_terminal=ip_terminal)
     # get OIDC from keycloak
-    username = f"{room.terminal_type}-{room.serial_number}"
-    OIDC = get_OIDC(username, room.password_keycloak)
+    username = f"{terminal.terminal_type}-{terminal.serial_number}"
+    OIDC = get_OIDC(username, terminal.password_keycloak)
     # get meetings from Magnify
     now = datetime.now()
     futur = now.replace(year = now.year + 1)
@@ -209,10 +265,10 @@ def get_my_meetings(request):
 @api_view(['GET'])
 def get_meetings_room(request, pk):
     ip_terminal = pk
-    room = Room.objects.get(ip_terminal=ip_terminal)
+    terminal = Terminal.objects.get(ip_terminal=ip_terminal)
     # get OIDC from keycloak
-    username = f"{room.terminal_type}-{room.serial_number}"
-    OIDC = get_OIDC(username, room.password_keycloak)
+    username = f"{terminal.terminal_type}-{terminal.serial_number}"
+    OIDC = get_OIDC(username, terminal.password_keycloak)
     # get meetings from Magnify
     now = datetime.now()
     futur = now.replace(year = now.year + 1)
@@ -224,13 +280,13 @@ def get_meetings_room(request, pk):
 def get_all_meetings(request):
 
     # On récupère les rooms suceptibles d'avoir des meetings prévus
-    rooms = Room.objects.filter(is_init = True)
+    terminals = Terminal.objects.filter(is_init = True)
 
     result = {}
 
-    for room in rooms:
-        username = f"{room.terminal_type}-{room.serial_number}"
-        OIDC = get_OIDC(username, room.password_keycloak)
+    for terminal in terminals:
+        username = f"{terminal.terminal_type}-{terminal.serial_number}"
+        OIDC = get_OIDC(username, terminal.password_keycloak)
         # get meetings from Magnify
         now = datetime.now()
         futur = now.replace(year = now.year + 1)
@@ -245,10 +301,10 @@ def get_all_meetings(request):
 def get_meeting_token(request):
     serial_number = request.GET.get("sn","")
     meeting_id = request.GET.get("id", "")
-    room = Room.objects.get(serial_number=serial_number)
+    terminal = Terminal.objects.get(serial_number=serial_number)
     # get OIDC from keycloak
-    username = f"{room.terminal_type}-{room.serial_number}"
-    OIDC = get_OIDC(username, room.password_keycloak)
+    username = f"{terminal.terminal_type}-{terminal.serial_number}"
+    OIDC = get_OIDC(username, terminal.password_keycloak)
     # get meetings from Magnify
     now = datetime.now()
     futur = now.replace(year = now.year + 1)
@@ -262,8 +318,3 @@ def get_meeting_token(request):
 def create_fake_meeting(request):
     script_meetings.set_up_meeting(verbose=True)
     return HttpResponse("Fake meeting was created")
-
-@api_view(['GET'])
-def switch_mode(request, mode):
-    os.environ["MODE"] = mode
-    return HttpResponse(f"Switch to mode {mode.upper()}")

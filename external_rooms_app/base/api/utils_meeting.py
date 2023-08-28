@@ -5,7 +5,7 @@ import pytz
 
 from django.utils import timezone
 
-from ..models import Room
+from ..models import Terminal,Room
 from . import script_meetings
 
 def only_3_next_meetings(meetings_json):
@@ -55,14 +55,21 @@ def handle_meeting_creation(data):
     start_date = data.get("start_date")
     room_names = data.get("rooms")
 
+    # for start_date in start_date:
+    #     print(start_date)
+
+    # for name_meeting in name_meeting:
+    #     print(name_meeting)
+
     devices = []
     for room_name in room_names:
         room = Room.objects.get(name=room_name)
+        terminal = Terminal.objects.get(room_id=room.pk)
         dic = {
-            "terminal_type" : room.terminal_type,
-            "serial_number" : room.serial_number,
-            "password" : room.password_keycloak,
-            "exists" : room.is_init
+            "terminal_type" : terminal.terminal_type,
+            "serial_number" : terminal.serial_number,
+            "password" : terminal.password_keycloak,
+            "exists" : terminal.is_init
         }
 
         devices.append(dic)

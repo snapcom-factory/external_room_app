@@ -1,0 +1,47 @@
+.globalHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: var(--header-height);
+    max-height: var(--header-height);
+
+    display: grid;
+    align-items: center;
+
+    grid-template-columns: var(--navBar-width);
+    grid-template-rows: auto;
+    grid-template-areas:
+        '. . .';
+
+    gap: 2rem;
+
+    background-color: white;
+    box-shadow: 0px .2rem .4rem #999a;
+
+    z-index: 1;
+}
+
+.marianne {
+    justify-self: center;
+    margin-inline: 2rem;
+    max-height: 3rem;
+}
+
+.siteTitle {
+    justify-self: start;
+}
+
+.mainHeaderActions {
+    display: flex;
+    justify-self: end;
+    align-items: center;
+}
+
+.mainHeaderActions>* {
+    margin-right: 1.5rem;
+}
+
+#logout-btn {
+    padding: .25rem 1.65rem;
+}
